@@ -1,0 +1,2 @@
+typescript-declarations-for-ext
+===============================
