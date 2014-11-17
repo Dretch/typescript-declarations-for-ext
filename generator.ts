@@ -235,35 +235,33 @@ function writeMember(classes: jsduck.Class[],
             retStr = constructor ? '' : ':' + retTyp;
         
         for (var i=0; i<member.params.length; i++) {
-            var param = member.params[i];
-            if (param.tagname == 'params') {
+
+            var param = member.params[i],
+                paramName = escapeParamName(param.name),
+                typ = param.type,
+                optional = param.optional;
                 
-                var paramName = escapeParamName(param.name),
-                    typ = param.type,
-                    optional = param.optional;
+            if (/\.\.\.$/.test(typ)) {
+            
+                paramName = '...' + paramName;
+                typ = typ.substring(0, typ.length - '...'.length) + '[]';
+                optional = false;
                 
-                if (/\.\.\.$/.test(typ)) {
-                
-                    paramName = '...' + paramName;
-                    typ = typ.substring(0, typ.length - '...'.length) + '[]';
-                    optional = false;
-                    
-                    // deal with types like string|number
-                    if (/[|\/]/.test(typ)) {
-                        typ = 'Mixed[]';
-                    }
-                    
-                    // Typescript can't have parameters after a ...param, so we have to relax the type
-                    if (i < member.params.length - 1) {
-                        typ = 'Mixed[]';
-                        i = member.params.length; // skip remaining params
-                    }
+                // deal with types like string|number
+                if (/[|\/]/.test(typ)) {
+                    typ = 'Mixed[]';
                 }
                 
-                typ = convertFromExtType(classes, typ);
-                
-                params.push(paramName + (optional ? '?: ' : ': ') + typ);
+                // Typescript can't have parameters after a ...param, so we have to relax the type
+                if (i < member.params.length - 1) {
+                    typ = 'Mixed[]';
+                    i = member.params.length; // skip remaining params
+                }
             }
+            
+            typ = convertFromExtType(classes, typ);
+            
+            params.push(paramName + (optional ? '?: ' : ': ') + typ);
         }
         
         output.push(indent + '    ' + static + member.name + '(' + params.join(', ') + ')' + retStr + ';');
