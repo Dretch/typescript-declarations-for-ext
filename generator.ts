@@ -228,8 +228,8 @@ function writeMember(classes: jsduck.Class[],
         }
         
         var params = [],
-            name = member.name == 'constructor' ? 'new ' : member.name,
-            retTyp = member.return ? convertFromExtType(classes, member.return.type) : 'void';
+            retTyp = member.return ? convertFromExtType(classes, member.return.type) : 'void',
+            retStr = member.name == 'constructor' ? '' : ':' + retTyp;
         
         for (var i=0; i<member.params.length; i++) {
             var param = member.params[i];
@@ -263,7 +263,7 @@ function writeMember(classes: jsduck.Class[],
             }
         }
         
-        output.push(indent + '    ' + static + name + '(' + params.join(', ') + '):' + retTyp + ';');
+        output.push(indent + '    ' + static + member.name + '(' + params.join(', ') + ')' + retStr + ';');
     }
     else {
         // XXX: we could potentially do stuff with the cfg and event tags
