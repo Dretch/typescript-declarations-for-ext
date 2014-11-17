@@ -205,11 +205,12 @@ function writeMember(classes: jsduck.Class[],
 
     var singleton = cls.singleton,
         isOverride = member.owner != cls.name || (member.overrides && member.overrides.length > 0),
-        static = (singleton || member.static) ? 'static ' : '';
+        static = (singleton || member.static) ? 'static ' : '',
+        constructor = member.tagname == 'method' && member.name == 'constructor';
 
     // don't repeat inherited members, because they are already in the parent class
     // Ext sometimes has overrides with incompatible types too, which is weird.
-    if (member.private || (!singleton && isOverride) || (singleton && member.static)) {
+    if (member.private || (!singleton && !constructor && isOverride) || (singleton && member.static)) {
         return;
     }
 
@@ -229,7 +230,7 @@ function writeMember(classes: jsduck.Class[],
         
         var params = [],
             retTyp = member.return ? convertFromExtType(classes, member.return.type) : 'void',
-            retStr = member.name == 'constructor' ? '' : ':' + retTyp;
+            retStr = constructor ? '' : ':' + retTyp;
         
         for (var i=0; i<member.params.length; i++) {
             var param = member.params[i];
