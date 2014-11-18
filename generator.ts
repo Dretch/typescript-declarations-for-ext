@@ -278,7 +278,8 @@ function writeTransformedClasses(classes: jsduck.Class[], outputFile: string):vo
     var modules = groupClassesByModule(classes),
         output = [];
 
-    // XXX: could write a header to the output (include name of input file (and path?), github url)
+    output.push('// Ext type declarations generated on ' + new Date());
+    output.push('// For more information, see: https://github.com/Dretch/typescript-declarations-for-ext');
 
     for (var i=0; i<modules.length; i++) {
     
