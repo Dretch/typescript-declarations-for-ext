@@ -2,7 +2,9 @@
 	"tagname": "class",
 	"name": "Test.TestClass",
 	"alternateClassNames": [],
-	"mixins": [],
+	"mixins": [
+		"Test.TestMixin"
+	],
 	"members": [
 		{
 			"tagname": "property",
@@ -45,6 +47,24 @@
 			"return": {
 				"type": "Test.TestClass"
 			}
+		},
+		{
+			"tagname": "method",
+			"name": "methodFromMixinNotOverridden",
+			"owner": "Test.TestMixin",
+			"params": []
+		},
+		{
+			"tagname": "method",
+			"name": "methodFromMixinOverridden",
+			"owner": "Test.TestClass",
+			"params": [],
+			"overrides": [
+				{
+					"owner": "Test.TestMixin",
+					"name": "methodFromMixinOverridden"
+				}
+			]
 		},
 		{
 			"tagname": "method",

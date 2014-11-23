@@ -17,14 +17,24 @@ function removeFirstLine(s: string):string {
 exports.testGenerator = function(test: nodeunit.Test):void {
     test.expect(1);
 
-    child_process.exec('tsc --module commonjs generator.ts && node generator.js ./test-data/jsduck ./test-data/actual-output.d.ts', function() {
+    child_process.exec(
+        'tsc --module commonjs generator.ts && node generator.js ./test-data/jsduck ./test-data/actual-output.d.ts',
+        function(error, stdout, stderr) {
 
-        var actual = fs.readFileSync('./test-data/actual-output.d.ts', 'utf8'),
-            expected = fs.readFileSync('./test-data/expected-output.d.ts', 'utf8');
+            if (error !== null) {
+                console.error('Error calling generator: ' + stderr);
+            }
 
-        fs.unlinkSync('./test-data/actual-output.d.ts');
+            var actual = removeFirstLine(fs.readFileSync('./test-data/actual-output.d.ts', 'utf8')),
+                expected = removeFirstLine(fs.readFileSync('./test-data/expected-output.d.ts', 'utf8'));
 
-        test.equal(removeFirstLine(actual), removeFirstLine(expected));
-        test.done();
-    });
+            // don't delete the output when it is wrong - we might need to inspect it
+            if (actual === expected) {
+                fs.unlinkSync('./test-data/actual-output.d.ts');
+            }
+
+            test.equal(actual, expected);
+            test.done();
+        }
+    );
 };

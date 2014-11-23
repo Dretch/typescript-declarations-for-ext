@@ -6,6 +6,8 @@ declare module Test {
         static optionalStaticArrayProperty?: string[];
         constructor(n: number, ...items: string[]);
         setNumberProperty(newNumber: number):Test.TestClass;
+        methodFromMixinNotOverridden():void;
+        methodFromMixinOverridden():void;
         staticMethod():void;
     }
 }

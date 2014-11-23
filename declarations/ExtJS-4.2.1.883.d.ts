@@ -1,4 +1,4 @@
-// Ext type declarations generated on Tue Nov 18 2014 22:18:47 GMT+0000 (GMT)
+// Ext type declarations generated on Sun Nov 23 2014 16:37:04 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;
@@ -182,14 +182,17 @@ declare module Ext {
         addCls(cls: any):Ext.Component;
         addClsWithUI(classes: any, skip: Object):void;
         addEvents(...eventNames: any[]):void;
+        addListener(element: Object, listeners: Object, scope: Object, options: Object):Object;
         addManagedListener(item: any, ename: any, fn?: Function, scope?: Object, options?: Object):Object;
         addPropertyToState(state: Object, propName: string, value?: string):boolean;
         addStateEvents(events: any):void;
         addUIClsToElement(ui: string):void;
         afterComponentLayout(width: number, height: number, oldWidth: any, oldHeight: any):void;
         afterRender():void;
+        afterSetPosition(x: number, y: number):void;
         alignTo(element: any, position?: string, offsets?: number[], animate?: any):Ext.util.Positionable;
         anchorTo(element: any, position?: string, offsets?: number[], animate?: any, monitorScroll?: any, callback?: Function):Ext.util.Positionable;
+        animate(animObj: Object):Object;
         applyState(state: Object):void;
         beforeBlur(e: Ext.EventObject):void;
         beforeComponentLayout(adjWidth: number, adjHeight: number):void;
@@ -199,6 +202,7 @@ declare module Ext {
         calculateConstrainedPosition(constrainTo?: any, proposedPosition?: number[], local?: boolean, proposedSize?: number[]):number[];
         clearListeners():void;
         clearManagedListeners():void;
+        destroy():void;
         disable(silent?: boolean):void;
         doAutoRender():void;
         doComponentLayout():Ext.container.Container;
@@ -221,14 +225,21 @@ declare module Ext {
         getInsertPosition(position: any):HTMLElement;
         getItemId():string;
         getLoader():Ext.ComponentLoader;
+        getLocalX():number;
+        getLocalXY():number[];
+        getLocalY():number;
         getOffsetsTo(offsetsTo: any):number[];
         getPlugin(pluginId: string):Ext.AbstractPlugin;
         getRegion():Ext.util.Region;
         getSize():Object;
         getSizeModel(ownerCtSizeModel: Object):Object;
+        getState():Object;
         getViewRegion():Ext.util.Region;
         getWidth():number;
+        getX():number;
         getXTypes():string;
+        getXY():number[];
+        getY():number;
         hasActiveFx():any;
         hasCls(className: string):boolean;
         hasListener(eventName: string):boolean;
@@ -283,12 +294,18 @@ declare module Ext {
         setDisabled(disabled: boolean):void;
         setDocked(dock: Object, layoutParent?: boolean):Ext.Component;
         setHeight(height: number):Ext.Component;
+        setLocalX(x: Object):Ext.util.Positionable;
+        setLocalXY(x: Object, y: Object):Ext.util.Positionable;
+        setLocalY(y: Object):Ext.util.Positionable;
         setMargin(margin: any):void;
         setRegion(region: Ext.util.Region, animate?: any):Ext.util.Positionable;
         setSize(width: any, height: any):Ext.Component;
         setUI(ui: string):void;
         setVisible(visible: boolean):Ext.Component;
         setWidth(width: number):Ext.Component;
+        setX(x: Object, animate: Object):Ext.util.Positionable;
+        setXY(xy: Object, animate: Object):Ext.util.Positionable;
+        setY(y: Object, animate: Object):Ext.util.Positionable;
         stopAnimation():Ext.dom.Element;
         stopFx():Ext.dom.Element;
         suspendEvent(...eventName: string[]):void;
@@ -859,10 +876,12 @@ declare module Ext {
     }
     export class LoadMask extends Ext.Component {
         constructor(config?: Object);
+        bindStore(store: Ext.data.Store):void;
         bindStoreListeners(store: Ext.data.AbstractStore):void;
         center():Ext.Component;
         doConstrain(constrainTo?: any):void;
         getStore():Ext.data.AbstractStore;
+        getStoreListeners(store: Object):Object;
         onBindStore(store: Ext.data.AbstractStore, initial: boolean):void;
         onUnbindStore(store: Ext.data.AbstractStore, initial: boolean):void;
         setActive(active?: boolean, newActive?: Ext.Component):void;
@@ -1597,6 +1616,7 @@ declare module Ext.chart {
         addEvents(...eventNames: any[]):void;
         addListener(eventName: any, fn?: Function, scope?: Object, options?: Object):Object;
         addManagedListener(item: any, ename: any, fn?: Function, scope?: Object, options?: Object):Object;
+        bindStore(store: Object, initial: Object):void;
         bindStoreListeners(store: Ext.data.AbstractStore):void;
         clearListeners():void;
         clearManagedListeners():void;
@@ -1604,6 +1624,7 @@ declare module Ext.chart {
         fireEvent(eventName: string, ...args: Object[]):boolean;
         fireEventArgs(eventName: string, args: Object[]):boolean;
         getStore():Ext.data.AbstractStore;
+        getStoreListeners():Object;
         hasListener(eventName: string):boolean;
         mon(item: any, ename: any, fn?: Function, scope?: Object, options?: Object):Object;
         mun(item: any, ename: any, fn?: Function, scope?: Object):void;
@@ -1799,6 +1820,7 @@ declare module Ext.container {
         down(selector?: any):Object;
         getComponent(comp: any):Ext.Component;
         getLayout():Ext.layout.container.Container;
+        getRefItems(deep: Object):void;
         insert(index: number, component: any):Ext.Component;
         isAncestor(possibleDescendant: Ext.Component):void;
         onAdd(component: Ext.Component, position: number):void;
@@ -3539,12 +3561,23 @@ declare module Ext.form {
         clearInvalid():void;
         extractFileInput():HTMLElement;
         getChecked():Ext.form.field.Checkbox[];
+        getErrors():string[];
+        getModelData():Object;
         getName():string;
+        getSubmitData():Object;
+        getValue():void;
         initField():void;
+        initValue():void;
+        isDirty():boolean;
+        isEqual(value1: Object, value2: Object):boolean;
         isFileUpload():boolean;
         isValid():boolean;
         markInvalid(errors: any):void;
+        reset():void;
+        resetOriginalValue():void;
+        setValue(value: Object):Ext.form.CheckboxGroup;
         transformOriginalValue(value: Object):Object;
+        validate():boolean;
     }
     export class CheckboxManager {
         static hasListeners: Object;
@@ -3637,9 +3670,11 @@ declare module Ext.form {
         getActiveError():string;
         getActiveErrors():string[];
         getCombinedErrors(invalidFields: Ext.form.field.Field[]):string[];
+        getFieldLabel():string;
         getInputId():string;
         getLabelWidth():number;
         getLabelableRenderData():Object;
+        getSubTplMarkup():string;
         hasActiveError():boolean;
         hasVisibleLabel():boolean;
         initFieldAncestor():void;
@@ -3838,18 +3873,23 @@ declare module Ext.form.field {
         beforeReset():void;
         checkChange():void;
         checkDirty():void;
+        clearInvalid():void;
         extractFileInput():HTMLElement;
         getActiveError():string;
         getActiveErrors():string[];
         getErrors(value: Object):string[];
         getFieldLabel():string;
+        getInputId():void;
         getLabelWidth():number;
         getLabelableRenderData():Object;
         getModelData():Object;
         getName():string;
         getRawValue():string;
         getSubTplData():Object;
+        getSubTplMarkup():void;
+        getSubmitData():Object;
         getSubmitValue():string;
+        getValue():Object;
         hasActiveError():boolean;
         hasVisibleLabel():boolean;
         initField():void;
@@ -3857,6 +3897,9 @@ declare module Ext.form.field {
         initValue():void;
         isDirty():boolean;
         isEqual(value1: Object, value2: Object):boolean;
+        isFileUpload():boolean;
+        isValid():boolean;
+        markInvalid(errors: any):void;
         processRawValue(value: Object):Object;
         rawToValue(rawValue: Object):Object;
         reset():void;
@@ -3868,6 +3911,7 @@ declare module Ext.form.field {
         setFieldStyle(style: any):void;
         setRawValue(value: Object):Object;
         setReadOnly(readOnly: boolean):void;
+        setValue(value: Object):Ext.form.field.Field;
         transformOriginalValue(value: Object):Object;
         transformRawValue(value: Object):Object;
         trimLabelSeparator():string;
@@ -3893,6 +3937,10 @@ declare module Ext.form.field {
         findRecord(field: string, value: Object):Ext.data.Model;
         findRecordByDisplay(value: Object):Ext.data.Model;
         findRecordByValue(value: Object):Ext.data.Model;
+        getStore():Ext.data.Store;
+        getStoreListeners():Object;
+        onBindStore(store: Object, initial: Object):void;
+        onUnbindStore(store: Object):void;
         select(r: Object):void;
         unbindStoreListeners(store: Ext.data.AbstractStore):void;
     }
@@ -3955,6 +4003,7 @@ declare module Ext.form.field {
         checkChange():void;
         checkDirty():void;
         cleanHtml(html: string):string;
+        clearInvalid():void;
         execCmd(cmd: string, value?: any):void;
         extractFileInput():HTMLElement;
         getDocMarkup():void;
@@ -3963,10 +4012,12 @@ declare module Ext.form.field {
         getName():string;
         getSubmitData():Object;
         getToolbar():Ext.toolbar.Toolbar;
+        getValue():Object;
         initField():void;
         initValue():void;
         insertAtCursor(text: string):void;
         isDirty():boolean;
+        isEqual(value1: Object, value2: Object):boolean;
         isFileUpload():boolean;
         isValid():boolean;
         markInvalid(errors: any):void;
@@ -3975,6 +4026,7 @@ declare module Ext.form.field {
         reset():void;
         resetOriginalValue():void;
         setReadOnly(readOnly: boolean):void;
+        setValue(value: Object):Ext.form.field.Field;
         syncValue():void;
         toggleSourceEdit(sourceEditMode?: boolean):void;
         transformOriginalValue(value: Object):Object;
@@ -4962,6 +5014,7 @@ declare module Ext.selection {
     export class Model extends Ext.util.Observable {
         selected: Ext.util.MixedCollection;
         constructor(cfg: Object);
+        bindStore(store: Object, initial: Object):void;
         bindStoreListeners(store: Ext.data.AbstractStore):void;
         deselect(records: any, suppressEvent?: boolean):void;
         deselectAll(suppressEvent?: boolean):void;
@@ -4971,6 +5024,7 @@ declare module Ext.selection {
         getSelection():Ext.data.Model[];
         getSelectionMode():string;
         getStore():Ext.data.AbstractStore;
+        getStoreListeners():Object;
         hasSelection():boolean;
         isFocused(record: Ext.data.Model):void;
         isLocked():boolean;
@@ -5176,6 +5230,7 @@ declare module Ext.toolbar {
         bindStoreListeners(store: Ext.data.AbstractStore):void;
         doRefresh():void;
         getStore():Ext.data.AbstractStore;
+        getStoreListeners():Object;
         moveFirst():void;
         moveLast():void;
         moveNext():void;
@@ -5731,6 +5786,7 @@ declare module Ext.util.TaskRunner {
 declare module Ext.view {
     export class AbstractView extends Ext.Component {
         constructor(config: any);
+        bindStore(store: Ext.data.Store):void;
         bindStoreListeners(store: Ext.data.AbstractStore):void;
         clearSelections():void;
         collectData(records: Ext.data.Model[], startIndex: number):Object[];
@@ -5745,8 +5801,12 @@ declare module Ext.view {
         getSelectedRecords():Ext.data.Model[];
         getSelectionCount():number;
         getSelectionModel():Ext.selection.Model;
+        getStore():Ext.data.Store;
+        getStoreListeners():Object;
         indexOf(nodeInfo: any):number;
         isSelected(node: any):boolean;
+        onBindStore(store: Object, initial: Object, propName: Object):void;
+        onUnbindStore(store: Object):void;
         prepareData(data: any, recordIndex: number, record: Ext.data.Model):any;
         refresh():void;
         refreshNode(index: number):void;

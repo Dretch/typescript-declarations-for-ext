@@ -205,23 +205,27 @@ function writeMember(classes: jsduck.Class[],
                      output: string[]):void {
 
     var singleton = cls.singleton,
-        isOverride = member.owner != cls.name || (member.overrides && member.overrides.length > 0),
-        static = (singleton || member.static) ? 'static ' : '',
-        mixin = cls.mixins && cls.mixins.indexOf(member.owner) != -1,
+        static = member.static,
+        overrides = member.overrides,
+        override = member.owner != cls.name || (overrides && overrides.length > 0),
+        overrideFromMixin = overrides && overrides.length == 1 && cls.mixins && cls.mixins.indexOf(overrides[0].owner) != -1,
+        mixin = cls.mixins && (cls.mixins.indexOf(member.owner) != -1 || overrideFromMixin),
         constructor = member.tagname == 'method' && member.name == 'constructor';
 
     // don't repeat inherited members, because they are already in the parent class
     // Ext sometimes has overrides with incompatible types too, which is weird.
-    if (member.private || (!singleton && !constructor && !mixin && isOverride) || (singleton && (member.static || constructor))) {
+    if (member.private || (!singleton && !constructor && !mixin && override) || (singleton && (static || constructor))) {
         return;
     }
+
+    var staticStr = (singleton || static) ? 'static ' : '';
 
     if (member.tagname == 'property') {
     
         var opt = member.optional ? '?: ' : ': ',
             typ = convertFromExtType(classes, member.type);
         
-        output.push(indent + '    ' + static + member.name + opt + typ + ';');
+        output.push(indent + '    ' + staticStr + member.name + opt + typ + ';');
     }
     else if (member.tagname == 'method') {
         
@@ -259,7 +263,7 @@ function writeMember(classes: jsduck.Class[],
             params.push(paramName + (optional ? '?: ' : ': ') + typ);
         }
         
-        output.push(indent + '    ' + static + member.name + '(' + params.join(', ') + ')' + retStr + ';');
+        output.push(indent + '    ' + staticStr + member.name + '(' + params.join(', ') + ')' + retStr + ';');
     }
     else {
         // XXX: we could potentially do stuff with the cfg and event tags
