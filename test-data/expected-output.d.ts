@@ -8,6 +8,7 @@ declare module Test {
         setNumberProperty(newNumber: number):Test.TestClass;
         methodFromMixinNotOverridden():void;
         methodFromMixinOverridden():void;
+        methodWithCallback(f: (x: string) => boolean):void;
         staticMethod():void;
     }
 }

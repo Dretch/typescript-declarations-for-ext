@@ -68,6 +68,30 @@
 		},
 		{
 			"tagname": "method",
+			"name": "methodWithCallback",
+			"owner": "Test.TestClass",
+			"params": [
+				{
+					"tagname": "params",
+					"name": "f",
+					"type": "Function",
+					"properties": [
+						{
+							"tagname": "params",
+							"name": "x",
+							"type": "String"
+						},
+						{
+							"tagname": "params",
+							"name": "return",
+							"type": "Boolean"
+						}
+					]
+				}
+			]
+		},
+		{
+			"tagname": "method",
 			"name": "staticMethod",
 			"owner": "Test.TestClass",
 			"params": []

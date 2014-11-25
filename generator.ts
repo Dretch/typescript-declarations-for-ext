@@ -36,6 +36,7 @@ module jsduck {
         name: string;
         type: string;
         optional: boolean;
+        properties?: Param[];
     }
 
 }
@@ -132,10 +133,11 @@ function groupClassesByModule(classes: jsduck.Class[]):{name: string; classes: j
 }
 
 
-// TODO: support function types
 // TODO: support closure syntax...
 // TODO: turn Object into any?
-function convertFromExtType(classes: jsduck.Class[], senchaType: string):string {
+function convertFromExtType(classes: jsduck.Class[],
+                            senchaType: string,
+                            properties?: jsduck.Param[]):string {
 
     function translateSubType(typ:string):string {
 
@@ -149,7 +151,26 @@ function convertFromExtType(classes: jsduck.Class[], senchaType: string):string 
             typ = typ.toLowerCase();
         }
 
-        if (typ == 'Mixed') {
+        if (typ == 'Function' && properties) {
+
+            // if no return type is specified, assume any - it is not safe to assume void
+            var params = [],
+                retTyp = 'any';
+
+            properties.forEach(function(property) {
+                if (property.name === 'return') {
+                    retTyp = convertFromExtType(classes, property.type, property.properties);
+                }
+                else {
+                    var opt = property.optional ? '?: ' : ': ',
+                        typ = convertFromExtType(classes, property.type, property.properties);
+                    params.push(property.name + opt + typ);
+                }
+            });
+
+            return '(' + params.join(', ') + ') => ' + retTyp + arrays;
+        }
+        else if (typ == 'Mixed') {
             return 'any' + arrays;
         }
         else if (typ == 'Array') {
@@ -230,7 +251,7 @@ function writeMember(classes: jsduck.Class[],
     else if (member.tagname == 'method') {
         
         var params = [],
-            retTyp = member.return ? convertFromExtType(classes, member.return.type) : 'void',
+            retTyp = member.return ? convertFromExtType(classes, member.return.type, member.return.properties) : 'void',
             retStr = constructor ? '' : ':' + retTyp;
         
         for (var i=0; i<member.params.length; i++) {
@@ -258,7 +279,7 @@ function writeMember(classes: jsduck.Class[],
                 }
             }
             
-            typ = convertFromExtType(classes, typ);
+            typ = convertFromExtType(classes, typ, param.properties);
             
             params.push(paramName + (optional ? '?: ' : ': ') + typ);
         }

@@ -1,4 +1,4 @@
-// Ext type declarations generated on Sun Nov 23 2014 16:37:04 GMT+0000 (GMT)
+// Ext type declarations generated on Mon Nov 24 2014 21:28:20 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;
@@ -81,7 +81,7 @@ declare class Ext {
     static deprecate(packageName: string, since: string, closure: Function, scope: Object):void;
     static destroy(...args: any[]):void;
     static destroyMembers(o: Object, ...args: string[]):void;
-    static each(iterable: any, fn: Function, scope?: Object, reverse?: boolean):boolean;
+    static each(iterable: any, fn: (item: Object, index: number, allItems: any[]) => boolean, scope?: Object, reverse?: boolean):boolean;
     static encode(o: Object):string;
     static escapeRe(str: string):string;
     static exclude(excludes: any[]):Object;
@@ -123,10 +123,10 @@ declare class Ext {
     static isTextNode(value: Object):boolean;
     static iterate(object: any, fn: Function, scope?: Object):void;
     static log(options?: any, ...message: string[]):void;
-    static max(array: any, comparisonFn?: Function):Object;
+    static max(array: any, comparisonFn?: (max: any, item: any) => any):Object;
     static mean(array: any[]):number;
     static merge(destination: Object, ...object: Object[]):Object;
-    static min(array: any, comparisonFn?: Function):Object;
+    static min(array: any, comparisonFn?: (min: any, item: any) => any):Object;
     static namespace(...namespaces: string[]):Object;
     static ns(...namespaces: string[]):Object;
     static num(value: Object, defaultValue: number):number;
@@ -326,7 +326,7 @@ declare module Ext {
         all: Ext.util.HashMap;
         constructor(config: Object);
         create(config: Object, defaultType: string):Object;
-        each(fn: Function, scope: Object):void;
+        each(fn: (key: string, value: number, length: number) => boolean, scope: Object):void;
         get(id: string):Object;
         getCount():number;
         isRegistered(type: string):boolean;
@@ -413,31 +413,31 @@ declare module Ext {
         static clone(array: any[]):any[];
         static contains(array: any[], item: Object):boolean;
         static difference(arrayA: any[], arrayB: any[]):any[];
-        static each(iterable: any, fn: Function, scope?: Object, reverse?: boolean):boolean;
+        static each(iterable: any, fn: (item: Object, index: number, allItems: any[]) => boolean, scope?: Object, reverse?: boolean):boolean;
         static equals(array1: any[], array2: any[]):boolean;
         static erase(array: any[], index: number, removeCount: number):any[];
-        static every(array: any[], fn: Function, scope: Object):boolean;
-        static filter(array: any[], fn: Function, scope: Object):any[];
-        static findBy(array: any[], fn: Function, scope?: Object):Object;
+        static every(array: any[], fn: (item: any, index: number, array: any[]) => any, scope: Object):boolean;
+        static filter(array: any[], fn: (item: any, index: number, array: any[]) => any, scope: Object):any[];
+        static findBy(array: any[], fn: (item: any, index: string) => any, scope?: Object):Object;
         static flatten(array: any[]):any[];
-        static forEach(array: any[], fn: Function, scope?: Object):void;
+        static forEach(array: any[], fn: (item: Object, index: number, allItems: any[]) => any, scope?: Object):void;
         static from(value: Object, newReference?: boolean):any[];
         static include(array: any[], item: Object):void;
         static indexOf(array: any[], item: Object, from?: number):number;
         static insert(array: any[], index: number, items: any[]):any[];
         static intersect(array1: any[], array2: any[], etc: any[]):any[];
-        static map(array: any[], fn: Function, scope?: Object):any[];
-        static max(array: any, comparisonFn?: Function):Object;
+        static map(array: any[], fn: (item: any, index: number, array: any[]) => any, scope?: Object):any[];
+        static max(array: any, comparisonFn?: (max: any, item: any) => any):Object;
         static mean(array: any[]):number;
         static merge(array1: any[], array2: any[], etc: any[]):any[];
-        static min(array: any, comparisonFn?: Function):Object;
+        static min(array: any, comparisonFn?: (min: any, item: any) => any):Object;
         static pluck(array: any, propertyName: string):any[];
         static push(target: any[], ...elements: Object[]):any[];
         static remove(array: any[], item: Object):any[];
         static replace(array: any[], index: number, removeCount: number, insert?: any[]):any[];
         static slice(array: any[], begin: number, end: number):any[];
-        static some(array: any[], fn: Function, scope: Object):boolean;
-        static sort(array: any[], sortFn?: Function):any[];
+        static some(array: any[], fn: (item: any, index: number, array: any[]) => any, scope: Object):boolean;
+        static sort(array: any[], sortFn?: (a: any, b: any) => any):any[];
         static splice(array: any[], index: number, removeCount: number, ...elements: Object[]):any[];
         static sum(array: any[]):number;
         static toArray(iterable: Object, start?: number, end?: number):any[];
@@ -529,7 +529,7 @@ declare module Ext {
         static callParent(args: any):Object;
         static callSuper(args: any):Object;
         static create(config: Object, defaultType?: string):Ext.Component;
-        static each(fn: Function, scope: Object):void;
+        static each(fn: (key: string, value: number, length: number) => boolean, scope: Object):void;
         static get(id: string):Object;
         static getCount():number;
         static getInitialConfig(name?: string):any;
@@ -1173,7 +1173,7 @@ declare module Ext {
         static callParent(args: any):Object;
         static callSuper(args: any):Object;
         static create(data: Object, name: string, id?: number):void;
-        static each(fn: Function, scope: Object):void;
+        static each(fn: (key: string, value: number, length: number) => boolean, scope: Object):void;
         static get(id: string):Object;
         static getCount():number;
         static getInitialConfig(name?: string):any;
@@ -1196,7 +1196,7 @@ declare module Ext {
     }
     export class Object {
         static chain(object: Object):void;
-        static each(object: Object, fn: Function, scope?: Object):void;
+        static each(object: Object, fn: (key: string, value: Object, object: Object) => any, scope?: Object):void;
         static equals(object1: Object, object2: Object):boolean;
         static fromQueryString(queryString: string, recursive?: boolean):Object;
         static getKey(object: Object, value: Object):void;
@@ -1215,7 +1215,7 @@ declare module Ext {
         static callParent(args: any):Object;
         static callSuper(args: any):Object;
         static create(config: Object, defaultType?: Function):Ext.Component;
-        static each(fn: Function, scope: Object):void;
+        static each(fn: (key: string, value: number, length: number) => boolean, scope: Object):void;
         static findByType(type: string, defaultsOnly: boolean):Ext.AbstractPlugin[];
         static get(id: string):Object;
         static getCount():number;
@@ -2163,8 +2163,8 @@ declare module Ext.data {
     }
     export class PageMap extends Ext.util.LruCache {
         constructor(config?: Object);
-        findBy(fn: Function, scope?: Object):Object;
-        findIndexBy(fn: Function, scope?: Object):number;
+        findBy(fn: (rec: any, index: any) => any, scope?: Object):Object;
+        findIndexBy(fn: (rec: any, index: any) => any, scope?: Object):number;
     }
     export class Request extends Ext.Base {
         constructor(config?: Object);
@@ -2209,7 +2209,7 @@ declare module Ext.data {
         count(grouped?: boolean):number;
         each(fn: Function, scope?: Object):void;
         find(fieldName: string, value: any, startIndex?: number, anyMatch?: boolean, caseSensitive?: boolean, exactMatch?: boolean):number;
-        findBy(fn: Function, scope?: Object, startIndex?: number):number;
+        findBy(fn: (record: Ext.data.Model, id: Object) => any, scope?: Object, startIndex?: number):number;
         findExact(fieldName: string, value: Object, startIndex?: number):number;
         findRecord(fieldName: string, value: any, startIndex?: number, anyMatch?: boolean, caseSensitive?: boolean, exactMatch?: boolean):Ext.data.Model;
         first(grouped?: boolean):any;
@@ -2239,7 +2239,7 @@ declare module Ext.data {
         prefetchRange(start: Object, end: Object):void;
         previousPage(options: Object):void;
         query(property: string, value: any, anyMatch?: boolean, caseSensitive?: boolean, exactMatch?: boolean):Ext.util.MixedCollection;
-        queryBy(fn: Function, scope?: Object):Ext.util.MixedCollection;
+        queryBy(fn: (record: Ext.data.Model, id: Object) => any, scope?: Object):Ext.util.MixedCollection;
         rejectChanges():void;
         remove(records: any):void;
         removeAt(index: number, count?: number):void;
@@ -2268,15 +2268,15 @@ declare module Ext.data {
         static collect(property: string, root?: string, allowBlank?: boolean):any[];
         static contains(o: Object):boolean;
         static containsKey(key: string):boolean;
-        static each(fn: Function, scope?: Object):void;
-        static eachKey(fn: Function, scope?: Object):void;
+        static each(fn: (item: any, index: number, len: number) => any, scope?: Object):void;
+        static eachKey(fn: (key: string, item: any, index: number, len: number) => any, scope?: Object):void;
         static enableBubble(eventNames: any):void;
         static filter(property: any, value: any, anyMatch?: boolean, caseSensitive?: boolean):Ext.util.MixedCollection;
-        static filterBy(fn: Function, scope?: Object):Ext.util.MixedCollection;
+        static filterBy(fn: (item: any, key: string) => any, scope?: Object):Ext.util.MixedCollection;
         static find():void;
-        static findBy(fn: Function, scope?: Object):Object;
+        static findBy(fn: (item: any, key: string) => any, scope?: Object):Object;
         static findIndex(property: string, value: any, start?: number, anyMatch?: boolean, caseSensitive?: boolean):number;
-        static findIndexBy(fn: Function, scope?: Object, start?: number):number;
+        static findIndexBy(fn: (item: any, key: string) => any, scope?: Object, start?: number):number;
         static findInsertionIndex(newItem: Object, sorterFn?: Function):number;
         static fireEvent(eventName: string, ...args: Object[]):boolean;
         static fireEventArgs(eventName: string, args: Object[]):boolean;
@@ -3052,7 +3052,7 @@ declare module Ext.dom {
         add(els: any):Ext.dom.CompositeElement;
         clear(removeDom?: boolean):void;
         contains(el: any):boolean;
-        each(fn: Function, scope?: Object):Ext.dom.CompositeElement;
+        each(fn: (el: Ext.dom.Element, c: Ext.dom.CompositeElement, index: number) => any, scope?: Object):Ext.dom.CompositeElement;
         fill(els: any):Ext.dom.CompositeElement;
         filter(selector: any):Ext.dom.CompositeElement;
         first():Ext.dom.Element;
@@ -3601,15 +3601,15 @@ declare module Ext.form {
         static collect(property: string, root?: string, allowBlank?: boolean):any[];
         static contains(o: Object):boolean;
         static containsKey(key: string):boolean;
-        static each(fn: Function, scope?: Object):void;
-        static eachKey(fn: Function, scope?: Object):void;
+        static each(fn: (item: any, index: number, len: number) => any, scope?: Object):void;
+        static eachKey(fn: (key: string, item: any, index: number, len: number) => any, scope?: Object):void;
         static enableBubble(eventNames: any):void;
         static filter(property: any, value: any, anyMatch?: boolean, caseSensitive?: boolean):Ext.util.MixedCollection;
-        static filterBy(fn: Function, scope?: Object):Ext.util.MixedCollection;
+        static filterBy(fn: (item: any, key: string) => any, scope?: Object):Ext.util.MixedCollection;
         static find():void;
-        static findBy(fn: Function, scope?: Object):Object;
+        static findBy(fn: (item: any, key: string) => any, scope?: Object):Object;
         static findIndex(property: string, value: any, start?: number, anyMatch?: boolean, caseSensitive?: boolean):number;
-        static findIndexBy(fn: Function, scope?: Object, start?: number):number;
+        static findIndexBy(fn: (item: any, key: string) => any, scope?: Object, start?: number):number;
         static findInsertionIndex(newItem: Object, sorterFn?: Function):number;
         static fireEvent(eventName: string, ...args: Object[]):boolean;
         static fireEventArgs(eventName: string, args: Object[]):boolean;
@@ -3774,15 +3774,15 @@ declare module Ext.form {
         static collect(property: string, root?: string, allowBlank?: boolean):any[];
         static contains(o: Object):boolean;
         static containsKey(key: string):boolean;
-        static each(fn: Function, scope?: Object):void;
-        static eachKey(fn: Function, scope?: Object):void;
+        static each(fn: (item: any, index: number, len: number) => any, scope?: Object):void;
+        static eachKey(fn: (key: string, item: any, index: number, len: number) => any, scope?: Object):void;
         static enableBubble(eventNames: any):void;
         static filter(property: any, value: any, anyMatch?: boolean, caseSensitive?: boolean):Ext.util.MixedCollection;
-        static filterBy(fn: Function, scope?: Object):Ext.util.MixedCollection;
+        static filterBy(fn: (item: any, key: string) => any, scope?: Object):Ext.util.MixedCollection;
         static find():void;
-        static findBy(fn: Function, scope?: Object):Object;
+        static findBy(fn: (item: any, key: string) => any, scope?: Object):Object;
         static findIndex(property: string, value: any, start?: number, anyMatch?: boolean, caseSensitive?: boolean):number;
-        static findIndexBy(fn: Function, scope?: Object, start?: number):number;
+        static findIndexBy(fn: (item: any, key: string) => any, scope?: Object, start?: number):number;
         static findInsertionIndex(newItem: Object, sorterFn?: Function):number;
         static fireEvent(eventName: string, ...args: Object[]):boolean;
         static fireEventArgs(eventName: string, args: Object[]):boolean;
@@ -4405,7 +4405,7 @@ declare module Ext.grid.plugin {
     export class BufferedRenderer extends Ext.AbstractPlugin {
         position: number;
         constructor(config?: Object);
-        scrollTo(recordIdx: number, doSelect: boolean, callback: Function, scope: Object):void;
+        scrollTo(recordIdx: number, doSelect: boolean, callback: (recordIdx: number, record: Ext.data.Model) => any, scope: Object):void;
     }
     export class CellEditing extends Ext.grid.plugin.Editing {
         constructor(config: Object);
@@ -5309,15 +5309,15 @@ declare module Ext.util {
         collect(property: string, root?: string, allowBlank?: boolean):any[];
         contains(o: Object):boolean;
         containsKey(key: string):boolean;
-        each(fn: Function, scope?: Object):void;
-        eachKey(fn: Function, scope?: Object):void;
+        each(fn: (item: any, index: number, len: number) => any, scope?: Object):void;
+        eachKey(fn: (key: string, item: any, index: number, len: number) => any, scope?: Object):void;
         enableBubble(eventNames: any):void;
         filter(property: any, value: any, anyMatch?: boolean, caseSensitive?: boolean):Ext.util.MixedCollection;
-        filterBy(fn: Function, scope?: Object):Ext.util.MixedCollection;
+        filterBy(fn: (item: any, key: string) => any, scope?: Object):Ext.util.MixedCollection;
         find():void;
-        findBy(fn: Function, scope?: Object):Object;
+        findBy(fn: (item: any, key: string) => any, scope?: Object):Object;
         findIndex(property: string, value: any, start?: number, anyMatch?: boolean, caseSensitive?: boolean):number;
-        findIndexBy(fn: Function, scope?: Object, start?: number):number;
+        findIndexBy(fn: (item: any, key: string) => any, scope?: Object, start?: number):number;
         fireEvent(eventName: string, ...args: Object[]):boolean;
         fireEventArgs(eventName: string, args: Object[]):boolean;
         first():Object;
@@ -5425,7 +5425,7 @@ declare module Ext.util {
     export class Filter extends Ext.Base {
         disabled: boolean;
         constructor(config?: Object);
-        setFilterFn(filterFn: Function):void;
+        setFilterFn(filterFn: (value: Object) => any):void;
         setValue(value: any):void;
         static createFilterFn(filters: Ext.util.Filter[]):Function;
     }
@@ -5489,7 +5489,7 @@ declare module Ext.util {
         clone():Ext.util.HashMap;
         contains(value: Object):boolean;
         containsKey(key: string):boolean;
-        each(fn: Function, scope?: Object):Ext.util.HashMap;
+        each(fn: (key: string, value: number, length: number) => any, scope?: Object):Ext.util.HashMap;
         enableBubble(eventNames: any):void;
         fireEvent(eventName: string, ...args: Object[]):boolean;
         fireEventArgs(eventName: string, args: Object[]):boolean;
