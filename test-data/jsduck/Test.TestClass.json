@@ -14,6 +14,18 @@
 		},
 		{
 			"tagname": "property",
+			"name": "objectProperty",
+			"type": "Object",
+			"owner": "Test.TestClass"
+		},
+		{
+			"tagname": "property",
+			"name": "objectArrayProperty",
+			"type": "Object[]",
+			"owner": "Test.TestClass"
+		},
+		{
+			"tagname": "property",
 			"name": "optionalStaticArrayProperty",
 			"static": true,
 			"type": "String[]",

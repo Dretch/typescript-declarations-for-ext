@@ -134,7 +134,6 @@ function groupClassesByModule(classes: jsduck.Class[]):{name: string; classes: j
 
 
 // TODO: support closure syntax...
-// TODO: turn Object into any?
 function convertFromExtType(classes: jsduck.Class[],
                             senchaType: string,
                             properties?: jsduck.Param[]):string {
@@ -170,7 +169,7 @@ function convertFromExtType(classes: jsduck.Class[],
 
             return '(' + params.join(', ') + ') => ' + retTyp + arrays;
         }
-        else if (typ == 'Mixed') {
+        else if (typ == 'Object' || typ == 'Mixed') {
             return 'any' + arrays;
         }
         else if (typ == 'Array') {

@@ -3,6 +3,8 @@
 declare module Test {
     export class TestClass {
         numberProperty: number;
+        objectProperty: any;
+        objectArrayProperty: any[];
         static optionalStaticArrayProperty?: string[];
         constructor(n: number, ...items: string[]);
         setNumberProperty(newNumber: number):Test.TestClass;
