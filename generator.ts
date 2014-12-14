@@ -4,7 +4,7 @@
 
 import fs = require('fs');
 import path = require('path');
-import jsesc = require('jsesc'); // TODO: create a npm package file with dependency info...
+import jsesc = require('jsesc');
 
 
 // TODO: write script (node!) to download (if not existant) the ext sources and generate the declaration files! (integrate with npm?)
