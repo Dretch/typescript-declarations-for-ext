@@ -1,8 +1,13 @@
 /// <reference path="./lib/node-0.11.d.ts" />
+/// <reference path="./lib/jsesc.d.ts" />
 
 
 import fs = require('fs');
 import path = require('path');
+import jsesc = require('jsesc'); // TODO: create a npm package file with dependency info...
+
+
+// TODO: write script (node!) to download (if not existant) the ext sources and generate the declaration files! (integrate with npm?)
 
 
 // This describes a subset of what JSDuck seems to produce when given the
@@ -79,6 +84,14 @@ var TYPESCRIPT_KEYWORDS = [
     ];
 
 
+// Places quotes around the given property name, if necessary
+function quote(name: string):string {
+    // due to unicode this is conservative, not precise, but thats OK
+    var needs_quotes = !/^[a-zA-Z$_][a-zA-Z$_0-9]*$/.test(name);
+    return needs_quotes ? ("'" + jsesc(name) + "'") : name;
+}
+
+
 function readClasses(inputDir: string):jsduck.Class[] {
 
     var classes = [],
@@ -90,6 +103,10 @@ function readClasses(inputDir: string):jsduck.Class[] {
             jsonPath = path.join(inputDir, file),
             cls = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
+        if (file.indexOf('Ext.') != 0) {
+			console.warn('Warning: skipping none Ext file: ' + file);
+            continue;
+        }
         if (cls.tagname != 'class') {
             throw 'Unknown top level tagname: ' + cls.tagname;
         }
@@ -150,7 +167,10 @@ function convertFromExtType(classes: jsduck.Class[],
             typ = typ.toLowerCase();
         }
 
-        if (typ == 'Function' && properties) {
+        if (typ == 'undefined') {
+            return 'void' + arrays;
+        }
+        else if (typ == 'Function' && properties) {
 
             // if no return type is specified, assume any - it is not safe to assume void
             var params = [],
@@ -169,7 +189,7 @@ function convertFromExtType(classes: jsduck.Class[],
 
             return '(' + params.join(', ') + ') => ' + retTyp + arrays;
         }
-        else if (typ == 'Object' || typ == 'Mixed') {
+        else if (typ == 'Object' || typ == 'Mixed' || typ == '*') {
             return 'any' + arrays;
         }
         else if (typ == 'Array') {
@@ -179,14 +199,20 @@ function convertFromExtType(classes: jsduck.Class[],
             return typ + arrays;
         }
         else {
-            return normalizeClassName(classes, typ) + arrays;
+            try {
+                return normalizeClassName(classes, typ) + arrays;
+            }
+            catch (e) {
+                console.warn('Warning: unable to find class, using "any" instead: ' + senchaType);
+                return 'any';
+            }
         }
     }
     
     senchaType = senchaType.replace(/ /g, '');
     var subTypes = senchaType.split(/[|\/]/);
 
-    // union types are on the way, but not yet released!
+    // union types are on the way in Typescript 1.4, but that is not yet released!
     if (subTypes.length > 1) {
         return 'any';
     }
@@ -218,8 +244,20 @@ function escapeParamName(name: string):string {
 }
 
 
+function lookupMember(members: jsduck.Member[], name: string, tagname: string):jsduck.Member {
+    for (var i=0; i<members.length; i++) {
+        var member = members[i];
+        if (member.name == name && member.tagname == tagname) {
+            return member;
+        }
+    }
+    return null;
+}
+
+
 function writeMember(classes: jsduck.Class[],
                      cls: jsduck.Class,
+                     members: jsduck.Member[],
                      member: jsduck.Member,
                      indent: string,
                      output: string[]):void {
@@ -242,23 +280,32 @@ function writeMember(classes: jsduck.Class[],
 
     if (member.tagname == 'property') {
     
+        // workaround a curiousity in Ext5
+        if (lookupMember(members, member.name, 'method')) {
+            console.warn('Warning: omitting property that also exists as a method: ' + cls.name + '.' + member.name);
+            return;
+        }
+
         var opt = member.optional ? '?: ' : ': ',
             typ = convertFromExtType(classes, member.type);
         
-        output.push(indent + '    ' + staticStr + member.name + opt + typ + ';');
+        output.push(indent + '    ' + staticStr + quote(member.name) + opt + typ + ';');
     }
     else if (member.tagname == 'method') {
         
         var params = [],
             retTyp = member.return ? convertFromExtType(classes, member.return.type, member.return.properties) : 'void',
-            retStr = constructor ? '' : ':' + retTyp;
+            retStr = constructor ? '' : ':' + retTyp,
+            optional = false;
         
         for (var i=0; i<member.params.length; i++) {
 
             var param = member.params[i],
                 paramName = escapeParamName(param.name),
-                typ = param.type,
-                optional = param.optional;
+                typ = param.type;
+
+            // after one optional parameter, all the following parameters must also be optional
+            optional = optional || param.optional;
                 
             if (/\.\.\.$/.test(typ)) {
             
@@ -283,7 +330,7 @@ function writeMember(classes: jsduck.Class[],
             params.push(paramName + (optional ? '?: ' : ': ') + typ);
         }
         
-        output.push(indent + '    ' + staticStr + member.name + '(' + params.join(', ') + ')' + retStr + ';');
+        output.push(indent + '    ' + staticStr + quote(member.name) + '(' + params.join(', ') + ')' + retStr + ';');
     }
     else {
         // XXX: we could potentially do stuff with the cfg and event tags
@@ -317,9 +364,9 @@ function writeTransformedClasses(classes: jsduck.Class[], outputFile: string):vo
                 modifier = module.name ? 'export' : 'declare';
 
             output.push(indent + modifier + ' class ' + name + extend + ' {');
-            for (var m=0; m<cls.members.length; m++) {
-                writeMember(classes, cls, cls.members[m], indent, output);
-            }
+            cls.members.forEach(function(member) {
+                writeMember(classes, cls, cls.members, member, indent, output);
+            });
             output.push(indent + '}');
         }
 

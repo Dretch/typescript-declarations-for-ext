@@ -1,35 +1,53 @@
 {
 	"tagname": "class",
-	"name": "Test.TestClass",
+	"name": "Ext.TestClass",
 	"alternateClassNames": [],
 	"mixins": [
-		"Test.TestMixin"
+		"Ext.TestMixin"
 	],
 	"members": [
 		{
 			"tagname": "property",
 			"name": "numberProperty",
 			"type": "Number",
-			"owner": "Test.TestClass"
+			"owner": "Ext.TestClass"
 		},
 		{
 			"tagname": "property",
 			"name": "objectProperty",
 			"type": "Object",
-			"owner": "Test.TestClass"
+			"owner": "Ext.TestClass"
+		},
+		{
+			"tagname": "property",
+			"name": "property-with-dashes",
+			"type": "*",
+			"owner": "Ext.TestClass"
+		},
+		{
+			"tagname": "property",
+			"name": "undefinedProperty",
+			"type": "undefined",
+			"owner": "Ext.TestClass"
+		},
+		{
+			"tagname": "property",
+			"name": "propertyWithNoneExistantClass",
+			"type": "Some.None.Existant.Cls",
+			"owner": "Ext.TestClass"
 		},
 		{
 			"tagname": "property",
 			"name": "objectArrayProperty",
 			"type": "Object[]",
-			"owner": "Test.TestClass"
+			"owner": "Ext.TestClass"
 		},
 		{
 			"tagname": "property",
 			"name": "optionalStaticArrayProperty",
 			"static": true,
 			"type": "String[]",
-			"owner": "Test.TestClass",
+			"owner": "Ext.TestClass",
 			"optional": true
 		},
 		{
@@ -49,7 +67,7 @@
 		{
 			"tagname": "method",
 			"name": "setNumberProperty",
-			"owner": "Test.TestClass",
+			"owner": "Ext.TestClass",
 			"params": [
 				{
 					"name": "newNumber",
@@ -57,23 +75,23 @@
 				}
 			],
 			"return": {
-				"type": "Test.TestClass"
+				"type": "Ext.TestClass"
 			}
 		},
 		{
 			"tagname": "method",
 			"name": "methodFromMixinNotOverridden",
-			"owner": "Test.TestMixin",
+			"owner": "Ext.TestMixin",
 			"params": []
 		},
 		{
 			"tagname": "method",
 			"name": "methodFromMixinOverridden",
-			"owner": "Test.TestClass",
+			"owner": "Ext.TestClass",
 			"params": [],
 			"overrides": [
 				{
-					"owner": "Test.TestMixin",
+					"owner": "Ext.TestMixin",
 					"name": "methodFromMixinOverridden"
 				}
 			]
@@ -81,7 +99,7 @@
 		{
 			"tagname": "method",
 			"name": "methodWithCallback",
-			"owner": "Test.TestClass",
+			"owner": "Ext.TestClass",
 			"params": [
 				{
 					"tagname": "params",
@@ -105,7 +123,7 @@
 		{
 			"tagname": "method",
 			"name": "staticMethod",
-			"owner": "Test.TestClass",
+			"owner": "Ext.TestClass",
 			"params": []
 		}
 	]
