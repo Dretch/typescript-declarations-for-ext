@@ -7,9 +7,6 @@ import path = require('path');
 import jsesc = require('jsesc');
 
 
-// TODO: write script (node!) to download (if not existant) the ext sources and generate the declaration files! (integrate with npm?)
-
-
 // This describes a subset of what JSDuck seems to produce when given the
 // "--export=full" switch. There are no offical docs regarding this format.
 module jsduck {
@@ -103,20 +100,19 @@ function readClasses(inputDir: string):jsduck.Class[] {
             jsonPath = path.join(inputDir, file),
             cls = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
-        if (file.indexOf('Ext.') != 0) {
-			console.warn('Warning: skipping none Ext file: ' + file);
-            continue;
-        }
-        if (cls.tagname != 'class') {
-            throw 'Unknown top level tagname: ' + cls.tagname;
-        }
+        if (file.indexOf('Ext.') == 0) { // ignore non-Ext files
 
-        // workaround wierdness in the JSDuck output
-        if (cls.name == 'Ext.Error') {
-            cls.extends = '';
-        }
+            if (cls.tagname != 'class') {
+                throw 'Unknown top level tagname: ' + cls.tagname;
+            }
 
-        classes.push(cls);
+            // workaround wierdness in the JSDuck output
+            if (cls.name == 'Ext.Error') {
+                cls.extends = '';
+            }
+
+            classes.push(cls);
+        }
     }
 
     return classes;
@@ -203,7 +199,7 @@ function convertFromExtType(classes: jsduck.Class[],
                 return normalizeClassName(classes, typ) + arrays;
             }
             catch (e) {
-                console.warn('Warning: unable to find class, using "any" instead: ' + senchaType);
+                console.warn('Warning: unable to find class, using "any" instead: "' + senchaType + '"');
                 return 'any';
             }
         }
@@ -294,6 +290,7 @@ function writeMember(classes: jsduck.Class[],
     else if (member.tagname == 'method') {
         
         var params = [],
+            prevParamNames = {},
             retTyp = member.return ? convertFromExtType(classes, member.return.type, member.return.properties) : 'void',
             retStr = constructor ? '' : ':' + retTyp,
             optional = false;
@@ -303,6 +300,11 @@ function writeMember(classes: jsduck.Class[],
             var param = member.params[i],
                 paramName = escapeParamName(param.name),
                 typ = param.type;
+
+            // Ext 5.1.0 has some duplicate parameter names!
+            while (prevParamNames[paramName]) {
+                paramName = '_' + paramName;
+            }
 
             // after one optional parameter, all the following parameters must also be optional
             optional = optional || param.optional;
@@ -328,6 +330,7 @@ function writeMember(classes: jsduck.Class[],
             typ = convertFromExtType(classes, typ, param.properties);
             
             params.push(paramName + (optional ? '?: ' : ': ') + typ);
+            prevParamNames[paramName] = true;
         }
         
         output.push(indent + '    ' + staticStr + quote(member.name) + '(' + params.join(', ') + ')' + retStr + ';');
@@ -360,8 +363,18 @@ function writeTransformedClasses(classes: jsduck.Class[], outputFile: string):vo
 
             var cls = module.classes[j],
                 name = cls.name.substring(cls.name.lastIndexOf('.') + 1),
-                extend = !cls.singleton && cls.extends ? ' extends ' + normalizeClassName(classes, cls.extends) : '',
-                modifier = module.name ? 'export' : 'declare';
+                modifier = module.name ? 'export' : 'declare',
+                normalizedParent = null;
+
+			// Ext 5.0.1 has some classes extending non-existent parent classes!
+            try {
+                normalizedParent = cls.extends && normalizeClassName(classes, cls.extends);
+            }
+            catch(e) {
+                console.warn('Warning: unable to find parent class, so omitting extends clause: ' + cls.extends);
+            }
+
+            var extend = !cls.singleton && normalizedParent ? ' extends ' + normalizedParent : '';
 
             output.push(indent + modifier + ' class ' + name + extend + ' {');
             cls.members.forEach(function(member) {

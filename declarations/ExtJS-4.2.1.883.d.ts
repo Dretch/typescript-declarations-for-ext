@@ -1,4 +1,4 @@
-// Ext type declarations generated on Tue Nov 25 2014 19:16:17 GMT+0000 (GMT)
+// Ext type declarations generated on Fri Dec 19 2014 21:31:07 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;

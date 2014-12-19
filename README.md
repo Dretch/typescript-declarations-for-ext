@@ -6,7 +6,7 @@ This is designed to be used in conjunction with fabioparra's patched Typescript 
 Pre-generated declaration file
 ==============================
 
-There is a pre-generated declarations file for the latest (at time of writing) Ext 4 release in the declarations folder.
+There is a selection of pre-generated declarations files (for ExtJS 4 and 5) in the declarations folder. Make an issue if you would like to see another one, or generate it yourself.
 
 
 Generating your own declaration file
