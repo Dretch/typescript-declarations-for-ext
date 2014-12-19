@@ -11,9 +11,10 @@ import shelljs = require('shelljs');
 
 var TMP_DIR = '/tmp/typescript-declarations-for-ext',
 	EXT_VERSIONS = [
+		{ name: 'ExtJS-4.1.0',     folder: 'extjs-4.1.0',   url: 'https://learningextjs.googlecode.com/files/ext-4.1.0-gpl.zip', jsduck_extra: ''},
 	    { name: 'ExtJS-4.2.1.883', folder: 'ext-4.2.1.883', url: 'http://cdn.sencha.com/ext/gpl/ext-4.2.1-gpl.zip', jsduck_extra: '' },
-	    { name: 'ExtJS-5.0.1', folder: 'ext-5.0.1', url: 'http://cdn.sencha.com/ext/gpl/ext-5.0.1-gpl.zip', jsduck_extra: 'ext-5.0.1/packages/sencha-*' },
-	    { name: 'ExtJS-5.1.0', folder: 'ext-5.1.0', url: 'http://cdn.sencha.com/ext/gpl/ext-5.1.0-gpl.zip', jsduck_extra: 'ext-5.1.0/packages/sencha-*' }
+	    { name: 'ExtJS-5.0.1',     folder: 'ext-5.0.1',     url: 'http://cdn.sencha.com/ext/gpl/ext-5.0.1-gpl.zip', jsduck_extra: 'ext-5.0.1/packages/sencha-*' },
+	    { name: 'ExtJS-5.1.0',     folder: 'ext-5.1.0',     url: 'http://cdn.sencha.com/ext/gpl/ext-5.1.0-gpl.zip', jsduck_extra: 'ext-5.1.0/packages/sencha-*' }
 	];
 
 
@@ -28,7 +29,7 @@ EXT_VERSIONS.forEach(function(version) {
 	shelljs.cd(dir);
 	shelljs.exec('wget --timestamping ' + version.url);
 	shelljs.exec('unzip -o *.zip');
-	shelljs.mkdir(version.folder + '.docs');
+	shelljs.mkdir('-p', version.folder + '.docs');
 	shelljs.exec('jsduck ' + version.folder + '/src ' + version.jsduck_extra + ' --export=full --output ' + version.folder + '.docs');
 	
 	shelljs.cd(oldPwd);
