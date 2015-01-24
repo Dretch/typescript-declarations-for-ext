@@ -1,4 +1,4 @@
-// Ext type declarations generated on Sat Jan 24 2015 15:48:44 GMT+0000 (GMT)
+// Ext type declarations generated on Sat Jan 24 2015 15:48:17 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;
@@ -67,7 +67,7 @@ declare class Ext {
     static applyIf(object: any, config: any):any;
     static batchLayouts(fn: Function, scope?: any):void;
     static bind(fn: Function, scope?: any, args?: any[], appendArgs?: any):Function;
-    static callback(callback: Function, scope?: any, args?: any[], delay?: number):any;
+    static callback(callback: Function, scope?: any, args?: any[], delay?: number):void;
     static clean(array: any[]):any[];
     static clone(item: any):any;
     static coerce(from: any, to: any):any;
@@ -209,7 +209,6 @@ declare module Ext {
         enable(silent?: boolean):void;
         enableBubble(eventNames: any):void;
         ensureAttachedToBody(runLayout?: boolean):void;
-        findPlugin(ptype: string):Ext.AbstractPlugin;
         fireEvent(eventName: string, ...args: any[]):boolean;
         fireEventArgs(eventName: string, args: any[]):boolean;
         forceComponentLayout():void;
@@ -313,7 +312,7 @@ declare module Ext {
         syncFx():any;
         translatePoints(x: any, y?: number):any;
         un(eventName: string, fn: Function, scope?: any):void;
-        up(selector?: any, limit?: any):Ext.container.Container;
+        up(selector?: any):Ext.container.Container;
         update(htmlOrData: any, loadScripts?: boolean, callback?: Function):void;
         updateLayout(options?: any):void;
         static cancelLayout(comp: Ext.Component):void;
@@ -337,13 +336,10 @@ declare module Ext {
     }
     export class AbstractPlugin extends Ext.Base {
         isPlugin: boolean;
-        constructor(config?: any);
-        clonePlugin(overrideCfg?: any):void;
+        constructor(config: any);
         disable():void;
         enable():void;
-        getCmp():Ext.Component;
         init(client: Ext.Component):void;
-        setCmp(cmp: Ext.Component):void;
     }
     export class Action extends Ext.Base {
         constructor(config: any);
@@ -499,7 +495,7 @@ declare module Ext {
         doConstrain(constrainTo?: any):void;
         findParentBy(fn: Function):Ext.container.Container;
         findParentByType(xtype: any):Ext.container.Container;
-        focus(selectText?: boolean, delay?: any, callback?: Function, scope?: Function):Ext.Component;
+        focus(selectText?: boolean, delay?: any):Ext.Component;
         getPosition(local?: boolean):number[];
         getXType():string;
         hide(animateTarget?: any, callback?: Function, scope?: any):Ext.Component;
@@ -507,12 +503,10 @@ declare module Ext {
         scrollBy(deltaX: any, deltaY: any, animate: any):void;
         setActive(active?: boolean, newActive?: Ext.Component):void;
         setAutoScroll(scroll: boolean):Ext.Component;
-        setBorderRegion(region: string):string;
         setLoading(load: any, targetEl?: boolean):Ext.LoadMask;
         setOverflowXY(overflowX: string, overflowY: string):Ext.Component;
         setPagePosition(x: any, y?: number, animate?: any):Ext.Component;
         setPosition(x: any, y?: number, animate?: any):Ext.Component;
-        setRegionWeight(weight: number):number;
         showAt(x: any, y?: number, animate?: any):Ext.Component;
         showBy(component: any, position?: string, offsets?: number[]):Ext.Component;
         toBack():Ext.Component;
@@ -673,7 +667,7 @@ declare module Ext {
     }
     export class EventManager {
         static idleEvent: any;
-        static addListener(el: any, eventName: string, handler: any, scope?: any, options?: any):void;
+        static addListener(el: any, eventName: string, handler: (event: Ext.EventObject, target: Ext.dom.Element, options: any) => any, scope?: any, options?: any):void;
         static getId(element: any):string;
         static getKeyEvent():string;
         static getPageX(event: any):number;
@@ -681,7 +675,7 @@ declare module Ext {
         static getPageY(event: any):number;
         static getRelatedTarget(event: any):HTMLElement;
         static getTarget(event: any):HTMLElement;
-        static on(el: any, eventName: string, handler: any, scope?: any, options?: any):void;
+        static on(el: any, eventName: string, handler: (event: Ext.EventObject, target: Ext.dom.Element, options: any) => any, scope?: any, options?: any):void;
         static onDocumentReady(fn: Function, scope?: any, options?: any):void;
         static onWindowResize(fn: Function, scope: any, options?: boolean):void;
         static onWindowUnload(fn: Function, scope: any, options: boolean):void;
@@ -996,10 +990,9 @@ declare module Ext {
         static expand(animate?: boolean):Ext.panel.Panel;
         static findParentBy(fn: Function):Ext.container.Container;
         static findParentByType(xtype: any):Ext.container.Container;
-        static findPlugin(ptype: string):Ext.AbstractPlugin;
         static fireEvent(eventName: string, ...args: any[]):boolean;
         static fireEventArgs(eventName: string, args: any[]):boolean;
-        static focus(selectText?: boolean, delay?: any, callback?: Function, scope?: Function):Ext.Component;
+        static focus(selectText?: boolean, delay?: any):Ext.Component;
         static forceComponentLayout():void;
         static getActiveAnimation():any;
         static getAlignToXY(element: any, position?: string, offsets?: number[]):number[];
@@ -1063,7 +1056,7 @@ declare module Ext {
         static maximize(animate: boolean):Ext.window.Window;
         static minimize():Ext.window.Window;
         static mon(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
-        static move(fromIdx: any, toIdx: number):Ext.Component;
+        static move(fromIdx: number, toIdx: number):Ext.Component;
         static mun(item: any, ename: any, fn?: Function, scope?: any):void;
         static nextNode(selector?: string):Ext.Component;
         static nextSibling(selector?: string):Ext.Component;
@@ -1117,7 +1110,6 @@ declare module Ext {
         static setAutoScroll(scroll: boolean):Ext.Component;
         static setBodyStyle(style: any, value: string):Ext.panel.Panel;
         static setBorder(border: any, targetEl: any):void;
-        static setBorderRegion(region: string):string;
         static setBox(box: any, animate?: any):Ext.util.Positionable;
         static setDisabled(disabled: boolean):void;
         static setDocked(dock: any, layoutParent?: boolean):Ext.Component;
@@ -1134,7 +1126,6 @@ declare module Ext {
         static setPagePosition(x: any, y?: number, animate?: any):Ext.Component;
         static setPosition(x: any, y?: number, animate?: any):Ext.Component;
         static setRegion(region: Ext.util.Region, animate?: any):Ext.util.Positionable;
-        static setRegionWeight(weight: number):number;
         static setSize(width: any, height: any):Ext.Component;
         static setTitle(newTitle: string):void;
         static setUI(ui: any):void;
@@ -1158,7 +1149,7 @@ declare module Ext {
         static toggleMaximize():Ext.window.Window;
         static translatePoints(x: any, y?: number):any;
         static un(eventName: string, fn: Function, scope?: any):void;
-        static up(selector?: any, limit?: any):Ext.container.Container;
+        static up(selector?: any):Ext.container.Container;
         static update(htmlOrData: any, loadScripts?: boolean, callback?: Function):void;
         static updateBox(box: any):Ext.Component;
         static updateLayout(options?: any):void;
@@ -1235,13 +1226,6 @@ declare module Ext {
         updateProgress(value?: number, text?: string, animate?: boolean):Ext.ProgressBar;
         updateText(text?: string):Ext.ProgressBar;
         wait(config?: any):Ext.ProgressBar;
-    }
-    export class Queryable extends Ext.Base {
-        child(selector?: any):any;
-        down(selector?: any):any;
-        query(selector?: string):Ext.Component[];
-        queryBy(fn: Function, scope?: any):Ext.Component[];
-        queryById(id: string):Ext.Component;
     }
     export class Shadow extends Ext.Base {
         constructor(config?: any);
@@ -1425,7 +1409,6 @@ declare module Ext {
         static Range: boolean;
         static RightMargin: boolean;
         static RotatedBoundingClientRect: boolean;
-        static ScrollWidthInlinePaddingBug: boolean;
         static Svg: boolean;
         static TextAreaMaxLength: boolean;
         static TimeoutActualLateness: boolean;
@@ -1563,15 +1546,10 @@ declare module Ext.button {
         pressed: boolean;
         template: Ext.Template;
         constructor(config: any);
-        child(selector?: any):any;
-        down(selector?: any):any;
         getTemplateArgs():any;
         getText():string;
         hasVisibleMenu():boolean;
         hideMenu():Ext.button.Button;
-        query(selector?: string):Ext.Component[];
-        queryBy(fn: Function, scope?: any):Ext.Component[];
-        queryById(id: string):Ext.Component;
         setGlyph(glyph: any):Ext.button.Button;
         setHandler(handler: Function, scope?: any):Ext.button.Button;
         setHref(href: string):void;
@@ -1652,8 +1630,8 @@ declare module Ext.chart {
         unHighlightItem():void;
     }
     export class Label extends Ext.Base {
-        onCreateLabel(storeItem: Ext.data.Model, item: any, i: number, display: string):Ext.draw.Sprite;
-        onPlaceLabel(label: Ext.draw.Sprite, storeItem: Ext.data.Model, item: any, i: number, display: string, animate: boolean, index: number):void;
+        onCreateLabel(storeItem: Ext.data.Model, item: any, i: number, display: boolean):Ext.draw.Sprite;
+        onPlaceLabel(label: Ext.draw.Sprite, storeItem: Ext.data.Model, item: any, i: number, display: boolean, animate: boolean, index: number):void;
     }
     export class Legend extends Ext.Base {
         isVertical: boolean;
@@ -1785,8 +1763,8 @@ declare module Ext.chart.series {
         mon(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         mun(item: any, ename: any, fn?: Function, scope?: any):void;
         on(eventName: any, fn?: Function, scope?: any, options?: any):any;
-        onCreateLabel(storeItem: Ext.data.Model, item: any, i: number, display: string):Ext.draw.Sprite;
-        onPlaceLabel(label: Ext.draw.Sprite, storeItem: Ext.data.Model, item: any, i: number, display: string, animate: boolean, index: number):void;
+        onCreateLabel(storeItem: Ext.data.Model, item: any, i: number, display: boolean):Ext.draw.Sprite;
+        onPlaceLabel(label: Ext.draw.Sprite, storeItem: Ext.data.Model, item: any, i: number, display: boolean, animate: boolean, index: number):void;
         relayEvents(origin: any, events: string[], prefix?: string):any;
         removeListener(eventName: string, fn: Function, scope?: any):void;
         removeManagedListener(item: any, ename: any, fn?: Function, scope?: any):void;
@@ -2096,7 +2074,7 @@ declare module Ext.data {
         nextSibling: Ext.data.NodeInterface;
         parentNode: Ext.data.NodeInterface;
         previousSibling: Ext.data.NodeInterface;
-        appendChild(node: any, suppressEvents?: boolean, commit?: boolean):Ext.data.NodeInterface;
+        appendChild(node: any):Ext.data.NodeInterface;
         bubble(fn: Function, scope?: any, args?: any[]):void;
         cascadeBy(fn: Function, scope?: any, args?: any[]):void;
         collapse(recursive?: boolean, callback?: Function, scope?: any):void;
@@ -2160,11 +2138,6 @@ declare module Ext.data {
         setStarted():void;
         setSuccessful():void;
         wasSuccessful():boolean;
-    }
-    export class PageMap extends Ext.util.LruCache {
-        constructor(config?: any);
-        findBy(fn: (rec: any, index: any) => any, scope?: any):any;
-        findIndexBy(fn: (rec: any, index: any) => any, scope?: any):number;
     }
     export class Request extends Ext.Base {
         constructor(config?: any);
@@ -2416,6 +2389,12 @@ declare module Ext.data {
         static statics():Ext.Class;
     }
 }
+declare module Ext.data.Store {
+    export class PageMap extends Ext.util.LruCache {
+        constructor(config?: any);
+        findBy(fn: (rec: any) => any, scope?: any):any;
+    }
+}
 declare module Ext.data.association {
     export class Association extends Ext.Base {
         associatedName: string;
@@ -2457,6 +2436,7 @@ declare module Ext.data.proxy {
         getMethod(request: Ext.data.Request):string;
     }
     export class Client extends Ext.data.proxy.Proxy {
+        isSynchronous: boolean;
         constructor(config?: any);
         clear():void;
     }
@@ -2478,7 +2458,6 @@ declare module Ext.data.proxy {
         hasListeners: any;
         isObservable: boolean;
         isProxy: boolean;
-        isSynchronous: boolean;
         constructor(config?: any);
         addEvents(...eventNames: any[]):void;
         addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
@@ -2722,7 +2701,6 @@ declare module Ext.dd {
         static verifyEl(el: HTMLElement):boolean;
     }
     export class DragSource extends Ext.dd.DDProxy {
-        dragData: any;
         constructor(el: any, config?: any);
         afterDragDrop(target: Ext.dd.DragDrop, e: Event, id: string):void;
         afterDragEnter(target: Ext.dd.DragDrop, e: Event, id: string):void;
@@ -2775,6 +2753,7 @@ declare module Ext.dd {
         un(eventName: string, fn: Function, scope?: any):void;
     }
     export class DragZone extends Ext.dd.DragSource {
+        dragData: any;
         constructor(el: any, config: any);
     }
     export class DropTarget extends Ext.dd.DDTarget {
@@ -3143,7 +3122,7 @@ declare module Ext.dom {
         scale(width: number, height: number, options?: any):Ext.dom.Element;
         scroll(direction: string, distance: number, animate?: any):boolean;
         scrollBy(deltaX: any, deltaY: any, animate: any):Ext.dom.Element;
-        scrollIntoView(container?: any, hscroll?: boolean, animate?: any, highlight?: boolean):Ext.dom.Element;
+        scrollIntoView(container?: any, hscroll?: boolean, animate?: any):Ext.dom.Element;
         scrollTo(side: string, value: number, animate?: any):Ext.dom.Element;
         selectable():Ext.dom.Element;
         setBottom(bottom: any):Ext.dom.Element;
@@ -3748,7 +3727,6 @@ declare module Ext.form {
         startPolling(interval: number):void;
         stopPolling():void;
         submit(options: any):void;
-        updateRecord(record?: Ext.data.Model):Ext.form.Basic;
     }
     export class RadioGroup extends Ext.form.CheckboxGroup {
         constructor(config: any);
@@ -3929,8 +3907,6 @@ declare module Ext.form.field {
     export class ComboBox extends Ext.form.field.Picker {
         lastQuery: string;
         constructor(config: any);
-        afterQuery(queryPlan: any):void;
-        beforeQuery(queryPlan: any):void;
         bindStore(store?: any):void;
         bindStoreListeners(store: Ext.data.AbstractStore):void;
         clearValue():void;
@@ -4223,10 +4199,6 @@ declare module Ext.fx.target {
     }
 }
 declare module Ext.grid {
-    export class CellContext extends Ext.Base {
-        isCellContext: boolean;
-        constructor(view: any);
-    }
     export class CellEditor extends Ext.Editor {
         constructor(config: any);
     }
@@ -4236,13 +4208,6 @@ declare module Ext.grid {
     export class ColumnLayout extends Ext.layout.container.HBox {
         constructor(config: any);
     }
-    export class ColumnManager extends Ext.Base {
-        constructor(headerCt: any, secondHeaderCt: any);
-        getHeaderAtIndex(index: number):Ext.grid.column.Column;
-        getHeaderById(id: string):Ext.grid.column.Column;
-        getHeaderIndex(header: Ext.grid.column.Column):number;
-        getVisibleHeaderClosestToIndex(index: number):void;
-    }
     export class Panel extends Ext.panel.Table {
         constructor(config: any);
     }
@@ -4251,6 +4216,9 @@ declare module Ext.grid {
         startEdit(record: Ext.data.Model, columnHeader: Ext.data.Model):void;
     }
     export class RowEditorButtons extends Ext.container.Container {
+        constructor(config: any);
+    }
+    export class RowNumberer extends Ext.grid.column.Column {
         constructor(config: any);
     }
     export class View extends Ext.view.Table {
@@ -4273,7 +4241,6 @@ declare module Ext.grid.column {
         constructor();
     }
     export class Column extends Ext.grid.header.Container {
-        isColumn: boolean;
         isHeader: boolean;
         textEl: Ext.dom.Element;
         triggerEl: Ext.dom.Element;
@@ -4293,9 +4260,6 @@ declare module Ext.grid.column {
         constructor(config: any);
     }
     export class Number extends Ext.grid.column.Column {
-        constructor(config: any);
-    }
-    export class RowNumberer extends Ext.grid.column.Column {
         constructor(config: any);
     }
     export class Template extends Ext.grid.column.Column {
@@ -4321,7 +4285,6 @@ declare module Ext.grid.feature {
     }
     export class GroupStore extends Ext.util.Observable {
         constructor(groupingFeature: any, store: any);
-        indexOfTotal(record: Ext.data.Model):number;
     }
     export class Grouping extends Ext.grid.feature.Feature {
         constructor();
@@ -4405,7 +4368,7 @@ declare module Ext.grid.locking {
 declare module Ext.grid.plugin {
     export class BufferedRenderer extends Ext.AbstractPlugin {
         position: number;
-        constructor(config?: any);
+        constructor(config: any);
         scrollTo(recordIdx: number, doSelect: boolean, callback: (recordIdx: number, record: Ext.data.Model) => any, scope: any):void;
     }
     export class CellEditing extends Ext.grid.plugin.Editing {
@@ -4413,7 +4376,7 @@ declare module Ext.grid.plugin {
         startEditByPosition(position: any):void;
     }
     export class DragDrop extends Ext.AbstractPlugin {
-        constructor(config?: any);
+        constructor(config: any);
     }
     export class Editing extends Ext.AbstractPlugin {
         editing: boolean;
@@ -4445,10 +4408,10 @@ declare module Ext.grid.plugin {
         un(eventName: string, fn: Function, scope?: any):void;
     }
     export class HeaderReorderer extends Ext.AbstractPlugin {
-        constructor(config?: any);
+        constructor(config: any);
     }
     export class HeaderResizer extends Ext.AbstractPlugin {
-        constructor(config?: any);
+        constructor(config: any);
         getDynamic():boolean;
         setDynamic(dynamic: boolean):void;
     }
@@ -4456,7 +4419,7 @@ declare module Ext.grid.plugin {
         constructor();
     }
     export class RowExpander extends Ext.AbstractPlugin {
-        constructor(config?: any);
+        constructor(config: any);
     }
 }
 declare module Ext.grid.property {
@@ -4496,7 +4459,7 @@ declare module Ext.layout {
         resetLayout(layout: any, ownerContext: any, firstTime: any):void;
         run():boolean;
         runCycle():boolean;
-        setItemSize(items: any, width: number, height: number):void;
+        setItemSize(undefined: any, width: number, height: number):void;
     }
     export class ContextItem extends Ext.Base {
         state: any;
@@ -4783,11 +4746,6 @@ declare module Ext.menu {
         menu: Ext.menu.Menu;
         parentMenu: Ext.menu.Menu;
         constructor(config: any);
-        child(selector?: any):any;
-        down(selector?: any):any;
-        query(selector?: string):Ext.Component[];
-        queryBy(fn: Function, scope?: any):Ext.Component[];
-        queryById(id: string):Ext.Component;
         setHandler(fn: Function, scope?: any):void;
         setIcon(icon: string):void;
         setIconCls(iconCls: string):void;
@@ -4886,7 +4844,6 @@ declare module Ext.panel {
         getStore():Ext.data.Store;
         getView():Ext.view.Table;
         invalidateScroller():void;
-        syncRowHeights():void;
     }
     export class Tool extends Ext.Component {
         isTool: boolean;
@@ -4911,7 +4868,6 @@ declare module Ext.picker {
     export class Color extends Ext.Component {
         colors: string[];
         constructor(config: any);
-        clear():void;
         getValue():string;
         select(color: string, suppressEvent?: boolean):void;
     }
@@ -5001,7 +4957,7 @@ declare module Ext.selection {
     export class CellModel extends Ext.selection.Model {
         constructor();
         getCurrentPosition():void;
-        setCurrentPosition(position: any, suppressEvent: boolean):void;
+        setCurrentPosition(position: any):void;
     }
     export class CheckboxModel extends Ext.selection.RowModel {
         constructor();
@@ -5289,7 +5245,7 @@ declare module Ext.tree {
 }
 declare module Ext.tree.plugin {
     export class TreeViewDragDrop extends Ext.AbstractPlugin {
-        constructor(config?: any);
+        constructor(config: any);
     }
 }
 declare module Ext.util {
@@ -5410,7 +5366,6 @@ declare module Ext.util {
         static statics():Ext.Class;
     }
     export class DelayedTask {
-        id: number;
         constructor(fn?: Function, scope?: any, args?: any[], cancelOnDelay?: boolean);
         cancel():void;
         delay(newDelay: number, newFn?: Function, newScope?: any, newArgs?: any[]):void;
@@ -5817,12 +5772,7 @@ declare module Ext.view {
     export class BoundList extends Ext.view.View {
         pagingToolbar: Ext.toolbar.Paging;
         constructor(config: any);
-        child(selector?: any):any;
-        down(selector?: any):any;
         getInnerTpl(displayField: string):string;
-        query(selector?: string):Ext.Component[];
-        queryBy(fn: Function, scope?: any):Ext.Component[];
-        queryById(id: string):Ext.Component;
     }
     export class BoundListKeyNav extends Ext.util.KeyNav {
         constructor(config: any);
@@ -5849,7 +5799,7 @@ declare module Ext.view {
         addRowCls(rowInfo: any, cls: string):void;
         autoSizeColumn(header: any):void;
         expandToFit(header: any):void;
-        focusRow(row: any, delay?: any):void;
+        focusRow(rowIdx: any):void;
         getBodySelector():void;
         getCellSelector(header?: Ext.grid.column.Column):void;
         getColumnSizerSelector(header: any):void;
@@ -5888,7 +5838,7 @@ declare module Ext.window {
         defaultTextHeight: number;
         minProgressWidth: number;
         minPromptWidth: number;
-        constructor(cfg: any);
+        constructor(config: any);
         alert(title: string, msg: string, fn?: Function, scope?: any):Ext.window.MessageBox;
         confirm(title: string, msg: string, fn?: Function, scope?: any):Ext.window.MessageBox;
         progress(title: string, msg: string, progressText?: string):Ext.window.MessageBox;

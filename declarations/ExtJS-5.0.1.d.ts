@@ -1,4 +1,4 @@
-// Ext type declarations generated on Fri Dec 19 2014 22:30:09 GMT+0000 (GMT)
+// Ext type declarations generated on Sat Jan 24 2015 15:49:34 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static USE_NATIVE_JSON: boolean;

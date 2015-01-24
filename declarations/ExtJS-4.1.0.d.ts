@@ -1,4 +1,4 @@
-// Ext type declarations generated on Fri Dec 19 2014 22:29:04 GMT+0000 (GMT)
+// Ext type declarations generated on Sat Jan 24 2015 14:50:10 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;
@@ -2841,7 +2841,7 @@ declare module Ext.dom {
         un(eventName: string, fn: Function, scope: any):Ext.dom.Element;
         unclip():Ext.dom.Element;
         unselectable():Ext.dom.Element;
-        static select(selector: any, root?: any):any;
+        static select(selector: any, unique?: boolean, root?: any):any;
         static serializeForm(form: any):string;
     }
     export class Helper {

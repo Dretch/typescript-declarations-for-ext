@@ -1,5 +1,7 @@
 /**
  * This script generates the default declaration files.
+ *
+ * It requires these external programs: tsc, wget, unzip and jsduck  (https://github.com/senchalabs/jsduck)
  */
 
 /// <reference path="./lib/node-0.11.d.ts" />
@@ -12,6 +14,7 @@ import shelljs = require('shelljs');
 var TMP_DIR = '/tmp/typescript-declarations-for-ext',
 	EXT_VERSIONS = [
 		{ name: 'ExtJS-4.1.0',     folder: 'extjs-4.1.0',   url: 'https://learningextjs.googlecode.com/files/ext-4.1.0-gpl.zip', jsduck_extra: ''},
+		{ name: 'ExtJS-4.2.0.663', folder: 'ext-4.2.0.663', url: 'http://cdn.sencha.com/ext/gpl/ext-4.2.0-gpl.zip', jsduck_extra: ''},
 	    { name: 'ExtJS-4.2.1.883', folder: 'ext-4.2.1.883', url: 'http://cdn.sencha.com/ext/gpl/ext-4.2.1-gpl.zip', jsduck_extra: '' },
 	    { name: 'ExtJS-5.0.1',     folder: 'ext-5.0.1',     url: 'http://cdn.sencha.com/ext/gpl/ext-5.0.1-gpl.zip', jsduck_extra: 'ext-5.0.1/packages/sencha-*' },
 	    { name: 'ExtJS-5.1.0',     folder: 'ext-5.1.0',     url: 'http://cdn.sencha.com/ext/gpl/ext-5.1.0-gpl.zip', jsduck_extra: 'ext-5.1.0/packages/sencha-*' }

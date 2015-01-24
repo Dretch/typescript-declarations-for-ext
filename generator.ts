@@ -398,6 +398,6 @@ if (process.argv.length <= 2) {
 else {
     var classes = readClasses(process.argv[2]);
     writeTransformedClasses(classes, process.argv[3]);
-    console.log('Wrote ' + classes.length + ' classes into ' + process.argv[3]);
+    console.log('Wrote ' + classes.length + ' class declarations into ' + process.argv[3]);
 }
 
