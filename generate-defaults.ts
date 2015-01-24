@@ -31,7 +31,7 @@ EXT_VERSIONS.forEach(function(version) {
 
 	shelljs.cd(dir);
 	shelljs.exec('wget --timestamping ' + version.url);
-	shelljs.exec('unzip -o *.zip');
+	shelljs.exec('unzip -uq *.zip');
 	shelljs.mkdir('-p', version.folder + '.docs');
 	shelljs.exec('jsduck ' + version.folder + '/src ' + version.jsduck_extra + ' --export=full --output ' + version.folder + '.docs');
 	
