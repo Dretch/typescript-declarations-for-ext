@@ -16,4 +16,9 @@ declare module Ext {
         methodWithCallback(f: (x: string) => boolean):void;
         staticMethod():void;
     }
+    export class TestSubClass extends Ext.TestSuperClass {
+        privateMethodInSuperClass():void;
+    }
+    export class TestSuperClass {
+    }
 }

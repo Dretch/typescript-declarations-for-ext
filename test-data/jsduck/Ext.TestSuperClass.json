@@ -1,0 +1,12 @@
+{
+  "tagname": "class",
+  "name": "Ext.TestSuperClass",
+  "members": [
+    {
+      "tagname": "method",
+      "name": "privateMethodInSuperClass",
+      "params": [],
+      "private": true
+    }
+  ]
+}

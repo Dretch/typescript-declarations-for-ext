@@ -25,6 +25,7 @@ module jsduck {
         name: string;
         type: string;
         private: boolean;
+        protected: boolean;
         owner: string;
         static: boolean;
         optional: boolean;
@@ -218,15 +219,26 @@ function convertFromExtType(classes: jsduck.Class[],
 }
 
 
+function escapeParamName(name: string):string {
+    var keyword = TYPESCRIPT_KEYWORDS.indexOf(name) != -1;
+    return keyword ? (name + '_') : name;
+}
+
+
 function normalizeClassName(classes: jsduck.Class[], name: string):string {
+    return lookupClass(classes, name).name;
+}
+
+
+function lookupClass(classes: jsduck.Class[], name: string):jsduck.Class {
     for (var i=0; i<classes.length; i++) {
         var cls = classes[i];
         if (cls.name == name) {
-            return name;
+            return cls;
         }
-        for (var j=0; j<cls.alternateClassNames.length; j++) {
+        for (var j=0; cls.alternateClassNames && j<cls.alternateClassNames.length; j++) {
             if (cls.alternateClassNames[j] == name) {
-                return cls.name;
+                return cls;
             }
         }
     }
@@ -234,20 +246,45 @@ function normalizeClassName(classes: jsduck.Class[], name: string):string {
 }
 
 
-function escapeParamName(name: string):string {
-    var keyword = TYPESCRIPT_KEYWORDS.indexOf(name) != -1;
-    return keyword ? (name + '_') : name;
-}
-
-
-function lookupMember(members: jsduck.Member[], name: string, tagname: string):jsduck.Member {
+function lookupMember(members: jsduck.Member[], name: string, tagname?: string, static?: boolean):jsduck.Member {
     for (var i=0; i<members.length; i++) {
         var member = members[i];
-        if (member.name == name && member.tagname == tagname) {
+        if (member.name === name &&
+            (typeof tagname !== 'string' || member.tagname === tagname) &&
+            (typeof static !== 'boolean' || !!member.static === static)) {
             return member;
         }
     }
     return null;
+}
+
+
+// Whether the visibility rules say we should emit this member
+function isMemberVisible(cls: jsduck.Class, member: jsduck.Member):boolean {
+
+    return member.protected ? (!cls.singleton && !member.static) : !member.private;
+}
+
+
+// Test if one of the parent classes of the given class will emit the given member
+function parentIncludesMember(classes: jsduck.Class[],
+                              cls: jsduck.Class,
+                              memberName: string,
+                              staticSide:boolean):boolean {
+
+    if (!cls.extends) {
+        return false;
+    }
+
+    var parentCls = lookupClass(classes, cls.extends);
+
+    if (parentIncludesMember(classes, parentCls, memberName, staticSide)) {
+        return true;
+    }
+
+    var member = lookupMember(parentCls.members, memberName, null, staticSide);
+
+    return member && isMemberVisible(parentCls, member);
 }
 
 
@@ -258,25 +295,25 @@ function writeMember(classes: jsduck.Class[],
                      indent: string,
                      output: string[]):void {
 
-    var singleton = cls.singleton,
-        static = member.static,
-        overrides = member.overrides,
-        override = member.owner != cls.name || (overrides && overrides.length > 0),
-        overrideFromMixin = overrides && overrides.length == 1 && cls.mixins && cls.mixins.indexOf(overrides[0].owner) != -1,
-        mixin = cls.mixins && (cls.mixins.indexOf(member.owner) != -1 || overrideFromMixin),
-        constructor = member.tagname == 'method' && member.name == 'constructor';
+    var constructor = member.tagname === 'method' && member.name === 'constructor';
 
     // don't repeat inherited members, because they are already in the parent class
     // Ext sometimes has overrides with incompatible types too, which is weird.
-    if (member.private || (!singleton && !constructor && !mixin && override) || (singleton && (static || constructor))) {
-        return;
+    if (cls.singleton) {
+        if (member.static || constructor || !isMemberVisible(cls, member)) {
+            return;
+        }
+    } else {
+        if (!constructor && (!isMemberVisible(cls, member) || parentIncludesMember(classes, cls, member.name, member.static))) {
+            return;
+        }
     }
 
-    var staticStr = (singleton || static) ? 'static ' : '';
+    var staticStr = (cls.singleton || member.static) ? 'static ' : '';
 
     if (member.tagname == 'property') {
     
-        // workaround a curiousity in Ext5
+        // workaround a curiosity in Ext5
         if (lookupMember(members, member.name, 'method')) {
             console.warn('Warning: omitting property that also exists as a method: ' + cls.name + '.' + member.name);
             return;

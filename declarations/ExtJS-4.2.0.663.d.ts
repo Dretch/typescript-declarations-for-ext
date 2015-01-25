@@ -1,4 +1,4 @@
-// Ext type declarations generated on Sat Jan 24 2015 15:48:17 GMT+0000 (GMT)
+// Ext type declarations generated on Sat Jan 24 2015 20:55:39 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;
@@ -324,7 +324,6 @@ declare module Ext {
     export class AbstractManager extends Ext.Base {
         all: Ext.util.HashMap;
         constructor(config: any);
-        create(config: any, defaultType: string):any;
         each(fn: (key: string, value: number, length: number) => boolean, scope: any):void;
         get(id: string):any;
         getCount():number;
@@ -337,6 +336,7 @@ declare module Ext {
     export class AbstractPlugin extends Ext.Base {
         isPlugin: boolean;
         constructor(config: any);
+        destroy():void;
         disable():void;
         enable():void;
         init(client: Ext.Component):void;
@@ -367,7 +367,6 @@ declare module Ext {
         static hasListeners: any;
         static isObservable: boolean;
         static method: string;
-        static self: Ext.Class;
         static timeout: number;
         static url: string;
         static abort(request?: any):void;
@@ -375,9 +374,6 @@ declare module Ext {
         static addEvents(...eventNames: any[]):void;
         static addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         static addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clearListeners():void;
         static clearManagedListeners():void;
         static enableBubble(eventNames: any):void;
@@ -385,7 +381,6 @@ declare module Ext {
         static fireEventArgs(eventName: string, args: any[]):boolean;
         static getInitialConfig(name?: string):any;
         static hasListener(eventName: string):boolean;
-        static initConfig(config: any):Ext.Base;
         static isLoading(request?: any):boolean;
         static mon(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         static mun(item: any, ename: any, fn?: Function, scope?: any):void;
@@ -398,7 +393,6 @@ declare module Ext {
         static resumeEvent(...eventName: string[]):void;
         static resumeEvents():void;
         static setOptions(options: any, scope: any):any;
-        static statics():Ext.Class;
         static suspendEvent(...eventName: string[]):void;
         static suspendEvents(queueSuspended: boolean):void;
         static un(eventName: string, fn: Function, scope?: any):void;
@@ -452,6 +446,7 @@ declare module Ext {
         statics():Ext.Class;
         static addMembers(members: any):void;
         static addStatics(members: any):Ext.Base;
+        static create():any;
         static createAlias(alias: any, origin: any):void;
         static getName():string;
         static implement():void;
@@ -495,10 +490,13 @@ declare module Ext {
         doConstrain(constrainTo?: any):void;
         findParentBy(fn: Function):Ext.container.Container;
         findParentByType(xtype: any):Ext.container.Container;
-        focus(selectText?: boolean, delay?: any):Ext.Component;
         getPosition(local?: boolean):number[];
+        getRefOwner():void;
         getXType():string;
-        hide(animateTarget?: any, callback?: Function, scope?: any):Ext.Component;
+        initComponent():void;
+        onDestroy():void;
+        onHide(animateTarget?: any, callback?: Function, scope?: any):void;
+        onShow(animateTarget?: any, callback?: Function, scope?: any):void;
         onShowComplete(callback?: Function, scope?: any):void;
         scrollBy(deltaX: any, deltaY: any, animate: any):void;
         setActive(active?: boolean, newActive?: Ext.Component):void;
@@ -507,6 +505,7 @@ declare module Ext {
         setOverflowXY(overflowX: string, overflowY: string):Ext.Component;
         setPagePosition(x: any, y?: number, animate?: any):Ext.Component;
         setPosition(x: any, y?: number, animate?: any):Ext.Component;
+        show(animateTarget?: any, callback?: Function, scope?: any):Ext.Component;
         showAt(x: any, y?: number, animate?: any):Ext.Component;
         showBy(component: any, position?: string, offsets?: number[]):Ext.Component;
         toBack():Ext.Component;
@@ -518,33 +517,21 @@ declare module Ext {
     }
     export class ComponentManager {
         static all: Ext.util.HashMap;
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static create(config: any, defaultType?: string):Ext.Component;
         static each(fn: (key: string, value: number, length: number) => boolean, scope: any):void;
         static get(id: string):any;
         static getCount():number;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static isRegistered(type: string):boolean;
         static onAvailable(id: string, fn: Function, scope: any):void;
         static register(item: any):void;
         static registerType(type: any, cls: any):void;
-        static statics():Ext.Class;
         static unregister(item: any):void;
     }
     export class ComponentQuery {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static is(component: Ext.Component, selector: string):boolean;
         static query(selector: string, root?: Ext.container.Container):Ext.Component[];
-        static statics():Ext.Class;
     }
     export class Date {
         static DAY: string;
@@ -594,26 +581,20 @@ declare module Ext {
         static unescapeFormat(format: string):string;
     }
     export class DomHelper {
-        static self: Ext.Class;
         static useDom: boolean;
         static append(el: any, o: any, returnElement?: boolean):any;
         static applyStyles(el: any, styles: any):void;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static createDom(o: any):HTMLElement;
         static createHtml(spec: any):string;
         static createTemplate(o: any):Ext.Template;
         static generateStyles(styles: any, buffer?: string[]):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static insertAfter(el: any, o: any, returnElement?: boolean):any;
         static insertBefore(el: any, o: any, returnElement?: boolean):any;
         static insertFirst(el: any, o: any, returnElement?: boolean):any;
         static insertHtml(where: string, el: any, html: string):HTMLElement;
         static markup(spec: any):string;
         static overwrite(el: any, o: any, returnElement?: boolean):any;
-        static statics():Ext.Class;
     }
     export class Editor extends Ext.container.Container {
         constructor(config: any);
@@ -635,6 +616,7 @@ declare module Ext {
         addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         clearListeners():void;
         clearManagedListeners():void;
+        destroy():void;
         enableBubble(eventNames: any):void;
         fireEvent(eventName: string, ...args: any[]):boolean;
         fireEventArgs(eventName: string, args: any[]):boolean;
@@ -809,15 +791,11 @@ declare module Ext {
         static focusedCmp: Ext.Component;
         static hasListeners: any;
         static isObservable: boolean;
-        static self: Ext.Class;
         static whitelist: string[];
         static addEvents(...eventNames: any[]):void;
         static addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         static addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         static addXTypeToWhitelist(xtype: any):void;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clearListeners():void;
         static clearManagedListeners():void;
         static disable():void;
@@ -827,7 +805,6 @@ declare module Ext {
         static fireEventArgs(eventName: string, args: any[]):boolean;
         static getInitialConfig(name?: string):any;
         static hasListener(eventName: string):boolean;
-        static initConfig(config: any):Ext.Base;
         static mon(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         static mun(item: any, ename: any, fn?: Function, scope?: any):void;
         static on(eventName: any, fn?: Function, scope?: any, options?: any):any;
@@ -837,7 +814,6 @@ declare module Ext {
         static removeXTypeFromWhitelist(xtype: any):void;
         static resumeEvent(...eventName: string[]):void;
         static resumeEvents():void;
-        static statics():Ext.Class;
         static suspendEvent(...eventName: string[]):void;
         static suspendEvents(queueSuspended: boolean):void;
         static un(eventName: string, fn: Function, scope?: any):void;
@@ -872,15 +848,10 @@ declare module Ext {
         constructor(config?: any);
         bindStore(store: Ext.data.Store):void;
         bindStoreListeners(store: Ext.data.AbstractStore):void;
-        center():Ext.Component;
-        doConstrain(constrainTo?: any):void;
         getStore():Ext.data.AbstractStore;
         getStoreListeners(store: any):any;
         onBindStore(store: Ext.data.AbstractStore, initial: boolean):void;
         onUnbindStore(store: Ext.data.AbstractStore, initial: boolean):void;
-        setActive(active?: boolean, newActive?: Ext.Component):void;
-        toBack():Ext.Component;
-        toFront(preventFocus?: boolean):Ext.Component;
         unbindStoreListeners(store: Ext.data.AbstractStore):void;
     }
     export class Loader {
@@ -908,7 +879,6 @@ declare module Ext {
         static YES: number;
         static YESNO: number;
         static YESNOCANCEL: number;
-        static _isLayoutRoot: boolean;
         static body: Ext.dom.Element;
         static buttonText: any;
         static contentPaddingProperty: string;
@@ -929,7 +899,6 @@ declare module Ext {
         static ownerCt: Ext.container.Container;
         static rendered: boolean;
         static scrollFlags: any;
-        static self: Ext.Class;
         static zIndexManager: Ext.ZIndexManager;
         static zIndexParent: Ext.container.Container;
         static add(...component: any[]):any;
@@ -942,32 +911,16 @@ declare module Ext {
         static addEvents(...eventNames: any[]):void;
         static addListener(element: any, listeners: any, scope: any, options: any):any;
         static addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
-        static addPropertyToState(state: any, propName: string, value?: string):boolean;
         static addStateEvents(events: any):void;
         static addTool(tools: any):void;
         static addUIClsToElement(cls: any):void;
-        static afterCollapse():void;
-        static afterComponentLayout():void;
-        static afterExpand():void;
-        static afterLayout(layout: Ext.layout.container.Container):void;
-        static afterSetPosition(ax: any, ay: any):void;
-        static afterShow(animateTarget?: any, callback?: Function, scope?: any):void;
         static alert(title: string, msg: string, fn?: Function, scope?: any):Ext.window.MessageBox;
         static alignTo(element: any, position?: string, offsets?: number[], animate?: any):Ext.util.Positionable;
         static anchorTo(element: any, position?: string, offsets?: number[], animate?: any, monitorScroll?: any, callback?: Function):Ext.util.Positionable;
         static animate(animObj: any):any;
         static applyState(state: any):void;
-        static beforeBlur(e: Ext.EventObject):void;
-        static beforeComponentLayout(adjWidth: number, adjHeight: number):void;
-        static beforeFocus(e: Ext.EventObject):void;
-        static beforeLayout():void;
-        static beforeShow():void;
         static bubble(fn: Function, scope?: any, args?: any[]):Ext.Component;
         static calculateConstrainedPosition(constrainTo?: any, proposedPosition?: number[], local?: boolean, proposedSize?: number[]):number[];
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
-        static cancelFocus():void;
         static cascade(fn: Function, scope?: any, args?: any[]):Ext.container.Container;
         static center():Ext.Component;
         static child(selector?: any):any;
@@ -998,7 +951,6 @@ declare module Ext {
         static getAlignToXY(element: any, position?: string, offsets?: number[]):number[];
         static getAnchorXY(anchor?: string, local?: boolean, size?: any):number[];
         static getBox(contentBox?: boolean, local?: boolean):any;
-        static getBubbleTarget():void;
         static getChildByElement(el: any, deep: boolean):Ext.Component;
         static getCollapsed():any;
         static getComponent(comp: any):Ext.Component;
@@ -1021,7 +973,6 @@ declare module Ext {
         static getOffsetsTo(offsetsTo: any):number[];
         static getPlugin(pluginId: string):Ext.AbstractPlugin;
         static getPosition(local?: boolean):number[];
-        static getRefItems(deep: any):void;
         static getRegion():Ext.util.Region;
         static getSize():any;
         static getSizeModel(ownerCtSizeModel: any):any;
@@ -1037,8 +988,6 @@ declare module Ext {
         static hasListener(eventName: string):boolean;
         static hasUICls(cls: string):void;
         static hide():Ext.Component;
-        static initConfig(config: any):Ext.Base;
-        static initEvents():void;
         static insert(index: number, component: any):Ext.Component;
         static insertDocked(pos: number, component: any):void;
         static is(selector: string):boolean;
@@ -1049,7 +998,6 @@ declare module Ext {
         static isDroppable():boolean;
         static isFloating():boolean;
         static isHidden():boolean;
-        static isLayoutRoot():void;
         static isLayoutSuspended():boolean;
         static isVisible(deep: any):boolean;
         static isXType(xtype: string, shallow?: boolean):boolean;
@@ -1061,22 +1009,6 @@ declare module Ext {
         static nextNode(selector?: string):Ext.Component;
         static nextSibling(selector?: string):Ext.Component;
         static on(eventName: any, fn?: Function, scope?: any, options?: any):any;
-        static onAdd(component: Ext.Component, position: number):void;
-        static onAdded():void;
-        static onBeforeAdd(item: Ext.Component):void;
-        static onDestroy():void;
-        static onDisable():void;
-        static onDockedAdd(component: Ext.Component):void;
-        static onDockedRemove(component: Ext.Component):void;
-        static onEnable():void;
-        static onHide():void;
-        static onPosition():void;
-        static onRemove(component: Ext.Component, autoDestroy: boolean):void;
-        static onRemoved(destroying: any):void;
-        static onResize():void;
-        static onShow():void;
-        static onShowComplete(callback?: Function, scope?: any):void;
-        static postBlur(e: Ext.EventObject):void;
         static previousNode(selector?: string):Ext.Component;
         static previousSibling(selector?: string):Ext.Component;
         static progress(title: string, msg: string, progressText?: string):Ext.window.MessageBox;
@@ -1137,7 +1069,6 @@ declare module Ext {
         static show(config: any):Ext.window.MessageBox;
         static showAt(x: any, y?: number, animate?: any):Ext.Component;
         static showBy(component: any, position?: string, offsets?: number[]):Ext.Component;
-        static statics():Ext.Class;
         static stopAnimation():Ext.dom.Element;
         static stopFx():Ext.dom.Element;
         static suspendEvent(...eventName: string[]):void;
@@ -1159,21 +1090,15 @@ declare module Ext {
     export class ModelManager {
         static all: Ext.util.HashMap;
         static associationStack: Ext.data.association.Association[];
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static create(data: any, name: string, id?: number):void;
         static each(fn: (key: string, value: number, length: number) => boolean, scope: any):void;
         static get(id: string):any;
         static getCount():number;
         static getInitialConfig(name?: string):any;
         static getModel(id: any):Ext.data.Model;
-        static initConfig(config: any):Ext.Base;
         static isRegistered(type: string):boolean;
         static onAvailable(id: string, fn: Function, scope: any):void;
         static register(item: any):void;
-        static statics():Ext.Class;
         static unregister(item: any):void;
     }
     export class Number {
@@ -1201,22 +1126,16 @@ declare module Ext {
     }
     export class PluginManager {
         static all: Ext.util.HashMap;
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static create(config: any, defaultType?: Function):Ext.Component;
         static each(fn: (key: string, value: number, length: number) => boolean, scope: any):void;
         static findByType(type: string, defaultsOnly: boolean):Ext.AbstractPlugin[];
         static get(id: string):any;
         static getCount():number;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static isRegistered(type: string):boolean;
         static onAvailable(id: string, fn: Function, scope: any):void;
         static register(item: any):void;
         static registerType(type: string, cls: Function):void;
-        static statics():Ext.Class;
         static unregister(item: any):void;
     }
     export class ProgressBar extends Ext.Component {
@@ -1237,13 +1156,7 @@ declare module Ext {
         show(targetEl: any):void;
     }
     export class ShadowPool {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
     export class String {
         static addCharacterEntities(entities: any):void;
@@ -1305,11 +1218,7 @@ declare module Ext {
         static getComponentValue(value: any):any;
     }
     export class WindowManager {
-        static self: Ext.Class;
         static bringToFront(comp: any):boolean;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static each(fn: Function, scope?: any):void;
         static eachBottomUp(fn: Function, scope?: any):void;
         static eachTopDown(fn: Function, scope?: any):void;
@@ -1318,15 +1227,12 @@ declare module Ext {
         static getBy(fn: Function, scope?: any):any[];
         static getInitialConfig(name?: string):any;
         static hideAll():void;
-        static initConfig(config: any):Ext.Base;
         static register(comp: Ext.Component):void;
         static sendToBack(comp: any):Ext.Component;
-        static statics():Ext.Class;
         static unregister(comp: Ext.Component):void;
     }
     export class XTemplate extends Ext.Template {
         constructor(...html: any[]);
-        static getTpl(instance: any, name: string):Ext.XTemplate;
     }
     export class XTemplateCompiler extends Ext.XTemplateParser {
         constructor(config: any);
@@ -1462,15 +1368,9 @@ declare module Ext.app {
         un(eventName: string, fn: Function, scope?: any):void;
     }
     export class EventBus {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static control(selectors: any, controller: Ext.app.Controller):void;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static listen(to: any, controller: Ext.app.Controller):void;
-        static statics():Ext.Class;
         static unlisten(controllerId: string):void;
     }
     export class EventDomain extends Ext.Base {
@@ -1482,65 +1382,23 @@ declare module Ext.app {
 }
 declare module Ext.app.domain {
     export class Component {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static match(target: any, selector: any):boolean;
-        static monitor(observable: Ext.Class):void;
-        static statics():Ext.Class;
     }
     export class Controller {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static match(target: any, selector: string):boolean;
-        static monitor(observable: Ext.Class):void;
-        static statics():Ext.Class;
     }
     export class Direct {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static match(target: any, selector: string):boolean;
-        static monitor(observable: Ext.Class):void;
-        static statics():Ext.Class;
     }
     export class Global {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static match():boolean;
-        static monitor(observable: Ext.Class):void;
-        static statics():Ext.Class;
     }
     export class Store {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static match(target: any, selector: string):boolean;
-        static monitor(observable: Ext.Class):void;
-        static statics():Ext.Class;
     }
 }
 declare module Ext.button {
     export class Button extends Ext.Component {
-        disabled: boolean;
-        hidden: boolean;
         isAction: boolean;
         menu: Ext.menu.Menu;
         pressed: boolean;
@@ -1570,13 +1428,7 @@ declare module Ext.button {
         toggleSelected():void;
     }
     export class Manager {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
     export class Split extends Ext.button.Button {
         constructor(config: any);
@@ -1588,39 +1440,17 @@ declare module Ext.chart {
         constructor(config: any);
     }
     export class Chart extends Ext.draw.Component {
-        hasListeners: any;
-        isObservable: boolean;
         constructor(config?: any);
-        addEvents(...eventNames: any[]):void;
-        addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
-        addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         bindStore(store: any, initial: any):void;
         bindStoreListeners(store: Ext.data.AbstractStore):void;
-        clearListeners():void;
-        clearManagedListeners():void;
-        enableBubble(eventNames: any):void;
-        fireEvent(eventName: string, ...args: any[]):boolean;
-        fireEventArgs(eventName: string, args: any[]):boolean;
         getStore():Ext.data.AbstractStore;
         getStoreListeners():any;
-        hasListener(eventName: string):boolean;
-        mon(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
-        mun(item: any, ename: any, fn?: Function, scope?: any):void;
-        on(eventName: any, fn?: Function, scope?: any, options?: any):any;
         onBindStore(store: Ext.data.AbstractStore, initial: boolean):void;
         onUnbindStore(store: Ext.data.AbstractStore, initial: boolean):void;
         redraw(resize?: boolean):void;
-        relayEvents(origin: any, events: string[], prefix?: string):any;
-        removeListener(eventName: string, fn: Function, scope?: any):void;
-        removeManagedListener(item: any, ename: any, fn?: Function, scope?: any):void;
         restoreZoom():void;
-        resumeEvent(...eventName: string[]):void;
-        resumeEvents():void;
         save(config?: any):any;
         setZoom(zoomConfig: any):void;
-        suspendEvent(...eventName: string[]):void;
-        suspendEvents(queueSuspended: boolean):void;
-        un(eventName: string, fn: Function, scope?: any):void;
         unbindStoreListeners(store: Ext.data.AbstractStore):void;
     }
     export class Highlight extends Ext.Base {
@@ -1630,6 +1460,7 @@ declare module Ext.chart {
         unHighlightItem():void;
     }
     export class Label extends Ext.Base {
+        constructor(config: any);
         onCreateLabel(storeItem: Ext.data.Model, item: any, i: number, display: boolean):Ext.draw.Sprite;
         onPlaceLabel(label: Ext.draw.Sprite, storeItem: Ext.data.Model, item: any, i: number, display: boolean, animate: boolean, index: number):void;
     }
@@ -1654,13 +1485,7 @@ declare module Ext.chart {
         setZoom(zoomConfig: any):void;
     }
     export class Shape {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
     export class Tip extends Ext.Base {
         constructor(config: any);
@@ -1675,6 +1500,7 @@ declare module Ext.chart.axis {
     }
     export class Axis extends Ext.chart.axis.Abstract {
         constructor(config?: any);
+        drawAxis(init: any):void;
         drawGrid():void;
         drawLabel():void;
         setTitle(title: string):void;
@@ -1984,16 +1810,10 @@ declare module Ext.data {
         static callbackKey: string;
         static disableCaching: boolean;
         static disableCachingParam: string;
-        static self: Ext.Class;
         static timeout: number;
         static abort(request?: any):void;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static request(options: any):any;
-        static statics():Ext.Class;
     }
     export class JsonPStore extends Ext.data.Store {
         constructor(config: any);
@@ -2026,6 +1846,7 @@ declare module Ext.data {
         clearManagedListeners():void;
         commit(silent?: boolean, modifiedFieldNames?: string[]):void;
         copy(id?: string):Ext.data.Model;
+        destroy(options: any):Ext.data.Model;
         enableBubble(eventNames: any):void;
         endEdit(silent?: boolean, modifiedFieldNames?: string[]):void;
         fireEvent(eventName: string, ...args: any[]):boolean;
@@ -2082,6 +1903,7 @@ declare module Ext.data {
         contains(node: Ext.data.NodeInterface):boolean;
         copy(id?: string, deep?: boolean):Ext.data.NodeInterface;
         createNode(node: any):Ext.data.NodeInterface;
+        destroy(silent: any):void;
         eachChild(fn: Function, scope?: any, args?: any[]):void;
         expand(recursive?: boolean, callback?: Function, scope?: any):void;
         expandChildren(recursive?: boolean, callback?: Function, scope?: any):void;
@@ -2150,7 +1972,6 @@ declare module Ext.data {
         constructor();
     }
     export class SortTypes {
-        static self: Ext.Class;
         static stripTagsRE: RegExp;
         static asDate(s: any):number;
         static asFloat(s: any):number;
@@ -2158,35 +1979,34 @@ declare module Ext.data {
         static asText(s: any):string;
         static asUCString(s: any):string;
         static asUCText(s: any):string;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static none(s: any):any;
-        static statics():Ext.Class;
     }
     export class Store extends Ext.data.AbstractStore {
         currentPage: number;
         data: any;
         snapshot: Ext.util.MixedCollection;
         constructor(config?: any);
-        add(...model: any[]):Ext.data.Model[];
         addFilter(filters: any, applyFilters?: boolean):void;
         addSorted(record: Ext.data.Model):void;
         aggregate(fn: Function, scope?: any, grouped?: boolean, args?: any[]):any;
         average(field: string, grouped?: boolean):any;
+        clearFilter(suppressEvent?: boolean):void;
         clearGrouping():void;
         collect(dataIndex: string, allowNull?: boolean, bypassFilter?: boolean):any[];
         commitChanges():void;
         count(grouped?: boolean):number;
         each(fn: Function, scope?: any):void;
+        filter(filters?: any, value?: string):void;
+        filterBy(fn: (record: Ext.data.Model, id: any) => any, scope?: any):void;
         find(fieldName: string, value: any, startIndex?: number, anyMatch?: boolean, caseSensitive?: boolean, exactMatch?: boolean):number;
         findBy(fn: (record: Ext.data.Model, id: any) => any, scope?: any, startIndex?: number):number;
         findExact(fieldName: string, value: any, startIndex?: number):number;
         findRecord(fieldName: string, value: any, startIndex?: number, anyMatch?: boolean, caseSensitive?: boolean, exactMatch?: boolean):Ext.data.Model;
         first(grouped?: boolean):any;
         getAt(index: number):Ext.data.Model;
+        getById(id: any):Ext.data.Model;
+        getCount():number;
         getGroupString(instance: Ext.data.Model):string;
         getGroups(groupName?: string):any;
         getPageFromRecordIndex(index: number):number;
@@ -2198,6 +2018,7 @@ declare module Ext.data {
         indexOfId(id: string):number;
         indexOfTotal(record: Ext.data.Model):number;
         insert(index: number, records: Ext.data.Model[]):Ext.data.Model[];
+        isFiltered():boolean;
         isGrouped():boolean;
         last(grouped?: boolean):any;
         loadData(data: any, append?: boolean):void;
@@ -2214,7 +2035,6 @@ declare module Ext.data {
         query(property: string, value: any, anyMatch?: boolean, caseSensitive?: boolean, exactMatch?: boolean):Ext.util.MixedCollection;
         queryBy(fn: (record: Ext.data.Model, id: any) => any, scope?: any):Ext.util.MixedCollection;
         rejectChanges():void;
-        remove(records: any):void;
         removeAt(index: number, count?: number):void;
         removeFilter(toRemove: any, applyFilters?: boolean):void;
         sum(field: string, grouped?: boolean):number;
@@ -2224,16 +2044,12 @@ declare module Ext.data {
         static isMixedCollection: boolean;
         static isObservable: boolean;
         static isSortable: boolean;
-        static self: Ext.Class;
         static sorters: Ext.util.MixedCollection;
         static add(key: any, obj?: any):any;
         static addAll(objs: any):void;
         static addEvents(...eventNames: any[]):void;
         static addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         static addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clear():void;
         static clearListeners():void;
         static clearManagedListeners():void;
@@ -2259,14 +2075,12 @@ declare module Ext.data {
         static getAt(index: number):any;
         static getByKey(key: any):any;
         static getCount():number;
-        static getFirstSorter():Ext.util.Sorter;
         static getInitialConfig(name?: string):any;
         static getKey(o: any):any;
         static getRange(startIndex?: number, endIndex?: number):any[];
         static hasListener(eventName: string):boolean;
         static indexOf(o: any):number;
         static indexOfKey(key: string):number;
-        static initConfig(config: any):Ext.Base;
         static initSortable():void;
         static insert(index: number, key: any, o?: any):any;
         static last():any;
@@ -2290,7 +2104,6 @@ declare module Ext.data {
         static sort(sorters?: any, direction?: string):Ext.util.Sorter[];
         static sortBy(sorterFn: Function):void;
         static sortByKey(direction?: string, fn?: Function):void;
-        static statics():Ext.Class;
         static sum(property: string, root?: string, start?: number, end?: number):number;
         static suspendEvent(...eventName: string[]):void;
         static suspendEvents(queueSuspended: boolean):void;
@@ -2332,7 +2145,6 @@ declare module Ext.data {
         constructor(data: any);
     }
     export class TreeStore extends Ext.data.AbstractStore {
-        fields: any;
         constructor(config: any);
         getNodeById(id: any):Ext.data.NodeInterface;
         getRootNode():Ext.data.NodeInterface;
@@ -2348,14 +2160,8 @@ declare module Ext.data {
         static INTEGER: any;
         static NUMBER: any;
         static STRING: any;
-        static self: Ext.Class;
         static stripRe: RegExp;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
     export class UuidGenerator extends Ext.data.IdGenerator {
         salt: any;
@@ -2374,19 +2180,13 @@ declare module Ext.data {
         static inclusionMessage: string;
         static lengthMessage: string;
         static presenceMessage: string;
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static email(config: any, email: string):boolean;
         static exclusion(config: any, value: string):boolean;
         static format(config: any, value: string):boolean;
         static getInitialConfig(name?: string):any;
         static inclusion(config: any, value: string):boolean;
-        static initConfig(config: any):Ext.Base;
         static length(config: any, value: string):boolean;
         static presence(config: any, value: any):boolean;
-        static statics():Ext.Class;
     }
 }
 declare module Ext.data.Store {
@@ -2465,7 +2265,7 @@ declare module Ext.data.proxy {
         batch(options: any):Ext.data.Batch;
         clearListeners():void;
         clearManagedListeners():void;
-        create(operation: Ext.data.Operation, callback: Function, scope: any):void;
+        destroy(operation: Ext.data.Operation, callback: Function, scope: any):void;
         enableBubble(eventNames: any):void;
         fireEvent(eventName: string, ...args: any[]):boolean;
         fireEventArgs(eventName: string, args: any[]):boolean;
@@ -2553,6 +2353,7 @@ declare module Ext.data.reader {
     export class Xml extends Ext.data.reader.Reader {
         xmlData: any;
         constructor(config?: any);
+        getData(data: any):any;
     }
 }
 declare module Ext.data.writer {
@@ -2575,6 +2376,8 @@ declare module Ext.dd {
         constructor(id: string, sGroup: string, config: any);
         alignElWithMouse(el: HTMLElement, iPageX: number, iPageY: number):void;
         autoOffset(iPageX: number, iPageY: number):void;
+        b4Drag(e: any):void;
+        b4MouseDown(e: any):void;
         cachePosition(iPageX?: number, iPageY?: number):void;
         setDelta(iDeltaX: number, iDeltaY: number):void;
         setDragElPos(iPageX: number, iPageY: number):void;
@@ -2671,12 +2474,8 @@ declare module Ext.dd {
         static mode: number;
         static notifyOccluded: boolean;
         static preventDefault: boolean;
-        static self: Ext.Class;
         static stopPropagation: boolean;
         static useCache: boolean;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getBestMatch(dds: Ext.dd.DragDrop[]):Ext.dd.DragDrop;
         static getCss(id: string):any;
         static getDDById(id: string):Ext.dd.DragDrop;
@@ -2684,7 +2483,6 @@ declare module Ext.dd {
         static getInitialConfig(name?: string):any;
         static getLocation(oDD: Ext.dd.DragDrop):Ext.util.Region;
         static getRelated(p_oDD: Ext.dd.DragDrop, bTargetsOnly: boolean):Ext.dd.DragDrop[];
-        static initConfig(config: any):Ext.Base;
         static isDragDrop(id: string):boolean;
         static isHandle(id: string):boolean;
         static isLegalTarget(oDD: Ext.dd.DragDrop, oTargetDD: Ext.dd.DragDrop):boolean;
@@ -2695,7 +2493,6 @@ declare module Ext.dd {
         static regDragDrop(oDD: Ext.dd.DragDrop, sGroup: string):void;
         static regHandle(sDDId: string, sHandleId: string):void;
         static startDrag(x: number, y: number):void;
-        static statics():Ext.Class;
         static stopEvent(e: Event):void;
         static unlock():void;
         static verifyEl(el: HTMLElement):boolean;
@@ -2755,6 +2552,8 @@ declare module Ext.dd {
     export class DragZone extends Ext.dd.DragSource {
         dragData: any;
         constructor(el: any, config: any);
+        getRepairXY(e: Event):number[];
+        onInitDrag(x: number, y: number):boolean;
     }
     export class DropTarget extends Ext.dd.DDTarget {
         constructor(el: any, config: any);
@@ -2774,18 +2573,12 @@ declare module Ext.dd {
         onNodeOver(nodeData: any, source: Ext.dd.DragSource, e: Event, data: any):string;
     }
     export class Registry {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getHandle(id: any):any;
         static getHandleFromEvent(e: Event):any;
         static getInitialConfig(name?: string):any;
         static getTarget(id: any):any;
         static getTargetFromEvent(e: Event):any;
-        static initConfig(config: any):Ext.Base;
         static register(element: any, data: any):void;
-        static statics():Ext.Class;
         static unregister(element: any):void;
     }
     export class ScrollManager {
@@ -2795,16 +2588,10 @@ declare module Ext.dd {
         static frequency: number;
         static hthresh: number;
         static increment: number;
-        static self: Ext.Class;
         static vthresh: number;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static refreshCache():void;
         static register(el: any):void;
-        static statics():Ext.Class;
         static unregister(el: any):void;
     }
     export class StatusProxy extends Ext.Component {
@@ -2828,7 +2615,6 @@ declare module Ext.direct {
     export class Event extends Ext.Base {
         constructor(config?: any);
         getData():any;
-        getName():string;
     }
     export class ExceptionEvent extends Ext.direct.RemotingEvent {
         constructor(config?: any);
@@ -2841,14 +2627,10 @@ declare module Ext.direct {
         static exceptions: any;
         static hasListeners: any;
         static isObservable: boolean;
-        static self: Ext.Class;
         static addEvents(...eventNames: any[]):void;
         static addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         static addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         static addProvider(...provider: any[]):void;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clearListeners():void;
         static clearManagedListeners():void;
         static enableBubble(eventNames: any):void;
@@ -2857,18 +2639,15 @@ declare module Ext.direct {
         static getInitialConfig(name?: string):any;
         static getProvider(id: any):void;
         static hasListener(eventName: string):boolean;
-        static initConfig(config: any):Ext.Base;
         static mon(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         static mun(item: any, ename: any, fn?: Function, scope?: any):void;
         static on(eventName: any, fn?: Function, scope?: any, options?: any):any;
-        static parseMethod(fn: any):Function;
         static relayEvents(origin: any, events: string[], prefix?: string):any;
         static removeListener(eventName: string, fn: Function, scope?: any):void;
         static removeManagedListener(item: any, ename: any, fn?: Function, scope?: any):void;
         static removeProvider(provider: any):Ext.direct.Provider;
         static resumeEvent(...eventName: string[]):void;
         static resumeEvents():void;
-        static statics():Ext.Class;
         static suspendEvent(...eventName: string[]):void;
         static suspendEvents(queueSuspended: boolean):void;
         static un(eventName: string, fn: Function, scope?: any):void;
@@ -2933,6 +2712,7 @@ declare module Ext.dom {
         child(selector: string, returnDom?: boolean):any;
         contains(el: any):boolean;
         createChild(config: any, insertBefore?: HTMLElement, returnDom?: boolean):Ext.dom.AbstractElement;
+        destroy():void;
         down(selector: string, returnDom?: boolean):any;
         findParent(selector: string, limit?: any, returnEl?: boolean):HTMLElement;
         findParentNode(selector: string, limit?: any, returnEl?: boolean):HTMLElement;
@@ -3202,6 +2982,7 @@ declare module Ext.draw {
         constructor(config: any);
         addCls(cls: string):void;
         animate(config: any):any;
+        destroy():void;
         getActiveAnimation():any;
         getBBox():any;
         hasActiveFx():any;
@@ -3217,15 +2998,9 @@ declare module Ext.draw {
         syncFx():any;
     }
     export class Draw {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static snapEndsByDate(from: Date, to: Date, stepsMax: number, lockEnds: boolean):any;
         static snapEndsByDateAndStep(from: Date, to: Date, step: any[], lockEnds: boolean):any;
-        static statics():Ext.Class;
     }
     export class Matrix extends Ext.Base {
         constructor(a: any, b: any, c: any, d: any, e: any, f: any);
@@ -3243,6 +3018,7 @@ declare module Ext.draw {
         animate(config: any):any;
         clearListeners():void;
         clearManagedListeners():void;
+        destroy():void;
         enableBubble(eventNames: any):void;
         fireEvent(eventName: string, ...args: any[]):boolean;
         fireEventArgs(eventName: string, args: any[]):boolean;
@@ -3288,6 +3064,7 @@ declare module Ext.draw {
         addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         clearListeners():void;
         clearManagedListeners():void;
+        destroy():void;
         enableBubble(eventNames: any):void;
         fireEvent(eventName: string, ...args: any[]):boolean;
         fireEventArgs(eventName: string, args: any[]):boolean;
@@ -3323,18 +3100,12 @@ declare module Ext.draw.engine {
     export class ImageExporter {
         static defaultUrl: string;
         static heightParam: string;
-        static self: Ext.Class;
         static supportedTypes: any[];
         static svgParam: string;
         static typeParam: string;
         static widthParam: string;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static generate(surface: Ext.draw.Surface, config?: any):boolean;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
     export class Svg extends Ext.draw.Surface {
         constructor(config?: any);
@@ -3343,14 +3114,8 @@ declare module Ext.draw.engine {
         hasCls(sprite: Ext.draw.Sprite, className: string):boolean;
     }
     export class SvgExporter {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static generate(surface: Ext.draw.Surface, config?: any):string;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
     export class Vml extends Ext.draw.Surface {
         constructor(config?: any);
@@ -3512,6 +3277,7 @@ declare module Ext.form {
         checkDirty():void;
         checkValidity():void;
         clearInvalid():Ext.form.Basic;
+        destroy():void;
         doAction(action: any, options?: any):Ext.form.Basic;
         findField(id: string):Ext.form.field.Field;
         getFieldValues(dirtyOnly?: boolean):any;
@@ -3543,7 +3309,6 @@ declare module Ext.form {
         getChecked():Ext.form.field.Checkbox[];
         getErrors():string[];
         getModelData():any;
-        getName():string;
         getSubmitData():any;
         getValue():void;
         initField():void;
@@ -3564,16 +3329,12 @@ declare module Ext.form {
         static isMixedCollection: boolean;
         static isObservable: boolean;
         static isSortable: boolean;
-        static self: Ext.Class;
         static sorters: Ext.util.MixedCollection;
         static add(key: any, obj?: any):any;
         static addAll(objs: any):void;
         static addEvents(...eventNames: any[]):void;
         static addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         static addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clear():void;
         static clearListeners():void;
         static clearManagedListeners():void;
@@ -3599,14 +3360,12 @@ declare module Ext.form {
         static getAt(index: number):any;
         static getByKey(key: any):any;
         static getCount():number;
-        static getFirstSorter():Ext.util.Sorter;
         static getInitialConfig(name?: string):any;
         static getKey(item: any):any;
         static getRange(startIndex?: number, endIndex?: number):any[];
         static hasListener(eventName: string):boolean;
         static indexOf(o: any):number;
         static indexOfKey(key: string):number;
-        static initConfig(config: any):Ext.Base;
         static initSortable():void;
         static insert(index: number, key: any, o?: any):any;
         static last():any;
@@ -3628,7 +3387,6 @@ declare module Ext.form {
         static sort(sorters?: any, direction?: string):Ext.util.Sorter[];
         static sortBy(sorterFn: Function):void;
         static sortByKey(direction?: string, fn?: Function):void;
-        static statics():Ext.Class;
         static sum(property: string, root?: string, start?: number, end?: number):number;
         static suspendEvent(...eventName: string[]):void;
         static suspendEvents(queueSuspended: boolean):void;
@@ -3736,16 +3494,12 @@ declare module Ext.form {
         static isMixedCollection: boolean;
         static isObservable: boolean;
         static isSortable: boolean;
-        static self: Ext.Class;
         static sorters: Ext.util.MixedCollection;
         static add(key: any, obj?: any):any;
         static addAll(objs: any):void;
         static addEvents(...eventNames: any[]):void;
         static addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         static addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clear():void;
         static clearListeners():void;
         static clearManagedListeners():void;
@@ -3771,14 +3525,12 @@ declare module Ext.form {
         static getAt(index: number):any;
         static getByKey(key: any):any;
         static getCount():number;
-        static getFirstSorter():Ext.util.Sorter;
         static getInitialConfig(name?: string):any;
         static getKey(item: any):any;
         static getRange(startIndex?: number, endIndex?: number):any[];
         static hasListener(eventName: string):boolean;
         static indexOf(o: any):number;
         static indexOfKey(key: string):number;
-        static initConfig(config: any):Ext.Base;
         static initSortable():void;
         static insert(index: number, key: any, o?: any):any;
         static last():any;
@@ -3800,7 +3552,6 @@ declare module Ext.form {
         static sort(sorters?: any, direction?: string):Ext.util.Sorter[];
         static sortBy(sorterFn: Function):void;
         static sortByKey(direction?: string, fn?: Function):void;
-        static statics():Ext.Class;
         static sum(property: string, root?: string, start?: number, end?: number):number;
         static suspendEvent(...eventName: string[]):void;
         static suspendEvents(queueSuspended: boolean):void;
@@ -3862,7 +3613,6 @@ declare module Ext.form.field {
         getLabelWidth():number;
         getLabelableRenderData():any;
         getModelData():any;
-        getName():string;
         getRawValue():string;
         getSubTplData():any;
         getSubTplMarkup():void;
@@ -3918,7 +3668,6 @@ declare module Ext.form.field {
         getStoreListeners():any;
         onBindStore(store: any, initial: any):void;
         onUnbindStore(store: any):void;
-        select(r: any):void;
         unbindStoreListeners(store: Ext.data.AbstractStore):void;
     }
     export class Date extends Ext.form.field.Picker {
@@ -3943,7 +3692,6 @@ declare module Ext.form.field {
         extractFileInput():HTMLElement;
         getErrors(value: any):string[];
         getModelData():any;
-        getName():string;
         getSubmitData():any;
         getValue():any;
         initField():void;
@@ -3963,6 +3711,7 @@ declare module Ext.form.field {
         button: Ext.button.Button;
         fileInputEl: Ext.dom.Element;
         constructor(config: any);
+        getTriggerMarkup():void;
     }
     export class FileButton extends Ext.button.Button {
         constructor(config: any);
@@ -3981,12 +3730,12 @@ declare module Ext.form.field {
         checkDirty():void;
         cleanHtml(html: string):string;
         clearInvalid():void;
+        createToolbar(editor: Ext.form.field.HtmlEditor):void;
         execCmd(cmd: string, value?: any):void;
         extractFileInput():HTMLElement;
         getDocMarkup():void;
         getErrors(value: any):string[];
         getModelData():any;
-        getName():string;
         getSubmitData():any;
         getToolbar():Ext.toolbar.Toolbar;
         getValue():any;
@@ -4068,17 +3817,11 @@ declare module Ext.form.field {
         static alphanumText: string;
         static emailMask: RegExp;
         static emailText: string;
-        static self: Ext.Class;
         static urlText: string;
         static alpha(value: string):boolean;
         static alphanum(value: string):boolean;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static email(value: string):boolean;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
         static url(value: string):boolean;
     }
 }
@@ -4091,6 +3834,7 @@ declare module Ext.fx {
         paused: boolean;
         running: boolean;
         startTime: Date;
+        constructor(config: any);
         addEvents(...eventNames: any[]):void;
         addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
@@ -4144,26 +3888,14 @@ declare module Ext.fx {
         un(eventName: string, fn: Function, scope?: any):void;
     }
     export class CubicBezier {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
     export class Easing {
     }
     export class Manager {
-        static self: Ext.Class;
         static addAnim(anim: Ext.fx.Anim):void;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static removeAnim(anim: Ext.fx.Anim):void;
-        static statics():Ext.Class;
     }
     export class PropertyHandler extends Ext.Base {
     }
@@ -4210,6 +3942,7 @@ declare module Ext.grid {
     }
     export class Panel extends Ext.panel.Table {
         constructor(config: any);
+        reconfigure(store?: Ext.data.Store, columns?: any[]):void;
     }
     export class RowEditor extends Ext.form.Panel {
         constructor(config: any);
@@ -4438,6 +4171,8 @@ declare module Ext.grid.property {
     }
     export class Store extends Ext.data.Store {
         constructor(grid: Ext.grid.Panel, source: any);
+        getSource():void;
+        setSource(dataObject: any):void;
     }
 }
 declare module Ext.layout {
@@ -4504,6 +4239,7 @@ declare module Ext.layout {
         calculate(ownerContext: Ext.layout.ContextItem):void;
         completeLayout(ownerContext: Ext.layout.ContextItem):void;
         configureItem(item: Ext.Component):void;
+        destroy():void;
         finalizeLayout(ownerContext: Ext.layout.ContextItem):void;
         finishedLayout(ownerContext: Ext.layout.ContextItem):void;
         getItemSizePolicy(item: Ext.Component):Ext.layout.SizePolicy;
@@ -4757,15 +4493,9 @@ declare module Ext.menu {
         constructor(config: any);
     }
     export class Manager {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static get(menu: any):Ext.menu.Menu;
         static getInitialConfig(name?: string):any;
         static hideAll():boolean;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
     export class Menu extends Ext.panel.Panel {
         isMenu: boolean;
@@ -4855,13 +4585,7 @@ declare module Ext.perf {
     export class Accumulator extends Ext.Base {
     }
     export class Monitor {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
-        static statics():Ext.Class;
     }
 }
 declare module Ext.picker {
@@ -5042,18 +4766,12 @@ declare module Ext.state {
         constructor();
     }
     export class Manager {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clear(name: string):void;
         static get(name: string, defaultValue: any):any;
         static getInitialConfig(name?: string):any;
         static getProvider():Ext.state.Provider;
-        static initConfig(config: any):Ext.Base;
         static set(name: string, value: any):void;
         static setProvider(stateProvider: Ext.state.Provider):void;
-        static statics():Ext.Class;
     }
     export class Provider extends Ext.Base {
         hasListeners: any;
@@ -5096,6 +4814,7 @@ declare module Ext.state {
         applyState(state: any):void;
         clearListeners():void;
         clearManagedListeners():void;
+        destroy():void;
         enableBubble(eventNames: any):void;
         fireEvent(eventName: string, ...args: any[]):boolean;
         fireEventArgs(eventName: string, args: any[]):boolean;
@@ -5146,20 +4865,14 @@ declare module Ext.tip {
         unregister(el: any):void;
     }
     export class QuickTipManager {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static destroy():void;
         static disable():void;
         static enable():void;
         static getInitialConfig(name?: string):any;
         static getQuickTip():Ext.tip.QuickTip;
         static init(autoRender?: boolean, config?: any):void;
-        static initConfig(config: any):Ext.Base;
         static isEnabled():boolean;
         static register(config: any):void;
-        static statics():Ext.Class;
         static tips(config: any):void;
         static unregister(el: any):void;
     }
@@ -5328,19 +5041,13 @@ declare module Ext.util {
         unbindStoreListeners(store: Ext.data.AbstractStore):void;
     }
     export class CSS {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static createRule(styleSheet: CSSStyleSheet, selector: string, property: string):CSSStyleRule;
         static createStyleSheet(cssText: string, id: string):CSSStyleSheet;
         static getInitialConfig(name?: string):any;
         static getRule(selector: any, refreshCache: boolean):CSSStyleRule;
         static getRules(refreshCache: boolean):any;
-        static initConfig(config: any):Ext.Base;
         static refreshCache():any;
         static removeStyleSheet(id: string):void;
-        static statics():Ext.Class;
         static swapStyleSheet(id: string, url: string):void;
         static updateRule(selector: any, property: string, value: string):boolean;
     }
@@ -5354,16 +5061,10 @@ declare module Ext.util {
         constructor(comp: any, config?: any);
     }
     export class Cookies {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clear(name: string, path?: string):void;
         static get(name: string):any;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static set(name: string, value: any, expires?: any, path?: string, domain?: string, secure?: boolean):void;
-        static statics():Ext.Class;
     }
     export class DelayedTask {
         constructor(fn?: Function, scope?: any, args?: any[], cancelOnDelay?: boolean);
@@ -5475,16 +5176,12 @@ declare module Ext.util {
         static hasListeners: any;
         static iframeId: string;
         static isObservable: boolean;
-        static self: Ext.Class;
         static useTopWindow: boolean;
         static add(token: string, preventDuplicates?: boolean):void;
         static addEvents(...eventNames: any[]):void;
         static addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         static addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         static back():void;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static clearListeners():void;
         static clearManagedListeners():void;
         static enableBubble(eventNames: any):void;
@@ -5495,7 +5192,6 @@ declare module Ext.util {
         static getToken():string;
         static hasListener(eventName: string):boolean;
         static init(onReady?: Function, scope?: any):void;
-        static initConfig(config: any):Ext.Base;
         static mon(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         static mun(item: any, ename: any, fn?: Function, scope?: any):void;
         static on(eventName: any, fn?: Function, scope?: any, options?: any):any;
@@ -5504,32 +5200,26 @@ declare module Ext.util {
         static removeManagedListener(item: any, ename: any, fn?: Function, scope?: any):void;
         static resumeEvent(...eventName: string[]):void;
         static resumeEvents():void;
-        static statics():Ext.Class;
         static suspendEvent(...eventName: string[]):void;
         static suspendEvents(queueSuspended: boolean):void;
         static un(eventName: string, fn: Function, scope?: any):void;
     }
     export class Inflector {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static classify(word: string):string;
         static clearPlurals():void;
         static clearSingulars():void;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static isTransnumeral(word: string):boolean;
         static ordinalize(number: number):string;
         static plural(matcher: RegExp, replacer: string):void;
         static pluralize(word: string):string;
         static singular(matcher: RegExp, replacer: string):void;
         static singularize(word: string):string;
-        static statics():Ext.Class;
     }
     export class KeyMap extends Ext.Base {
         constructor(config: any);
         addBinding(binding: any):void;
+        destroy(removeTarget: boolean):void;
         disable():void;
         enable():void;
         isEnabled():boolean;
@@ -5540,6 +5230,7 @@ declare module Ext.util {
     }
     export class KeyNav extends Ext.Base {
         constructor(config: any);
+        destroy(removeEl: boolean):void;
         disable():void;
         enable():void;
         setDisabled(disabled: boolean):void;
@@ -5573,6 +5264,7 @@ declare module Ext.util {
         hasListeners: any;
         isObservable: boolean;
         addEvents(...eventNames: any[]):void;
+        addListener(eventName: any, fn?: Function, scope?: any, options?: any):any;
         addManagedListener(item: any, ename: any, fn?: Function, scope?: any, options?: any):any;
         clearListeners():void;
         clearManagedListeners():void;
@@ -5603,6 +5295,7 @@ declare module Ext.util {
         isContainedBy(region: any):boolean;
         isWithin(p: any, threshold: any):boolean;
         roundedEquals(p: any):boolean;
+        toString():string;
         translate(x: any, y: number):Ext.util.Region;
         static fromEvent(e: any):Ext.util.Point;
     }
@@ -5699,21 +5392,16 @@ declare module Ext.util {
         updateSortFunction(fn?: Function):void;
     }
     export class TaskManager {
-        static self: Ext.Class;
-        static callOverridden(args: any):any;
-        static callParent(args: any):any;
-        static callSuper(args: any):any;
         static destroy():void;
         static getInitialConfig(name?: string):any;
-        static initConfig(config: any):Ext.Base;
         static newTask(config: any):void;
         static start(task: any):any;
-        static statics():Ext.Class;
         static stop(task: any):any;
         static stopAll():void;
     }
     export class TaskRunner extends Ext.Base {
         constructor(interval?: any);
+        destroy():void;
         newTask(config: any):void;
         start(task: any):any;
         stop(task: any):any;
@@ -5722,6 +5410,7 @@ declare module Ext.util {
     export class TextMetrics extends Ext.Base {
         constructor(bindTo: any, fixedWidth?: number);
         bind(el: any):void;
+        destroy():void;
         getHeight(text: string):number;
         getSize(text: string):any;
         getWidth(text: string):number;
@@ -5805,6 +5494,7 @@ declare module Ext.view {
         getColumnSizerSelector(header: any):void;
         getDataRowSelector():void;
         getFeature(id: string):Ext.grid.feature.Feature;
+        getItemSelector():void;
         getNodeContainerSelector():void;
         getRowClass(record: Ext.data.Model, index: number, rowParams: any, store: Ext.data.Store):string;
         removeRowCls(rowInfo: any, cls: string):void;

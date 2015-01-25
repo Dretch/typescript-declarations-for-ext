@@ -1,130 +1,130 @@
 {
-	"tagname": "class",
-	"name": "Ext.TestClass",
-	"alternateClassNames": [],
-	"mixins": [
-		"Ext.TestMixin"
-	],
-	"members": [
-		{
-			"tagname": "property",
-			"name": "numberProperty",
-			"type": "Number",
-			"owner": "Ext.TestClass"
-		},
-		{
-			"tagname": "property",
-			"name": "objectProperty",
-			"type": "Object",
-			"owner": "Ext.TestClass"
-		},
-		{
-			"tagname": "property",
-			"name": "property-with-dashes",
-			"type": "*",
-			"owner": "Ext.TestClass"
-		},
-		{
-			"tagname": "property",
-			"name": "undefinedProperty",
-			"type": "undefined",
-			"owner": "Ext.TestClass"
-		},
-		{
-			"tagname": "property",
-			"name": "propertyWithNoneExistantClass",
-			"type": "Some.None.Existant.Cls",
-			"owner": "Ext.TestClass"
-		},
-		{
-			"tagname": "property",
-			"name": "objectArrayProperty",
-			"type": "Object[]",
-			"owner": "Ext.TestClass"
-		},
-		{
-			"tagname": "property",
-			"name": "optionalStaticArrayProperty",
-			"static": true,
-			"type": "String[]",
-			"owner": "Ext.TestClass",
-			"optional": true
-		},
-		{
-			"tagname": "method",
-			"name": "constructor",
-			"params": [
-				{
-					"name": "n",
-					"type": "number"
-				},
-				{
-					"name": "items",
-					"type": "String..."
-				}
-			]
-		},
-		{
-			"tagname": "method",
-			"name": "setNumberProperty",
-			"owner": "Ext.TestClass",
-			"params": [
-				{
-					"name": "newNumber",
-					"type": "Number"
-				}
-			],
-			"return": {
-				"type": "Ext.TestClass"
-			}
-		},
-		{
-			"tagname": "method",
-			"name": "methodFromMixinNotOverridden",
-			"owner": "Ext.TestMixin",
-			"params": []
-		},
-		{
-			"tagname": "method",
-			"name": "methodFromMixinOverridden",
-			"owner": "Ext.TestClass",
-			"params": [],
-			"overrides": [
-				{
-					"owner": "Ext.TestMixin",
-					"name": "methodFromMixinOverridden"
-				}
-			]
-		},
-		{
-			"tagname": "method",
-			"name": "methodWithCallback",
-			"owner": "Ext.TestClass",
-			"params": [
-				{
-					"tagname": "params",
-					"name": "f",
-					"type": "Function",
-					"properties": [
-						{
-							"tagname": "params",
-							"name": "x",
-							"type": "String"
-						},
-						{
-							"tagname": "params",
-							"name": "return",
-							"type": "Boolean"
-						}
-					]
-				}
-			]
-		},
-		{
-			"tagname": "method",
-			"name": "staticMethod",
-			"owner": "Ext.TestClass",
-			"params": []
-		}
-	]
+  "tagname": "class",
+  "name": "Ext.TestClass",
+  "alternateClassNames": [],
+  "mixins": [
+    "Ext.TestMixin"
+  ],
+  "members": [
+    {
+      "tagname": "property",
+      "name": "numberProperty",
+      "type": "Number",
+      "owner": "Ext.TestClass"
+    },
+    {
+      "tagname": "property",
+      "name": "objectProperty",
+      "type": "Object",
+      "owner": "Ext.TestClass"
+    },
+    {
+      "tagname": "property",
+      "name": "property-with-dashes",
+      "type": "*",
+      "owner": "Ext.TestClass"
+    },
+    {
+      "tagname": "property",
+      "name": "undefinedProperty",
+      "type": "undefined",
+      "owner": "Ext.TestClass"
+    },
+    {
+      "tagname": "property",
+      "name": "propertyWithNoneExistantClass",
+      "type": "Some.None.Existant.Cls",
+      "owner": "Ext.TestClass"
+    },
+    {
+      "tagname": "property",
+      "name": "objectArrayProperty",
+      "type": "Object[]",
+      "owner": "Ext.TestClass"
+    },
+    {
+      "tagname": "property",
+      "name": "optionalStaticArrayProperty",
+      "static": true,
+      "type": "String[]",
+      "owner": "Ext.TestClass",
+      "optional": true
+    },
+    {
+      "tagname": "method",
+      "name": "constructor",
+      "params": [
+        {
+          "name": "n",
+          "type": "number"
+        },
+        {
+          "name": "items",
+          "type": "String..."
+        }
+      ]
+    },
+    {
+      "tagname": "method",
+      "name": "setNumberProperty",
+      "owner": "Ext.TestClass",
+      "params": [
+        {
+          "name": "newNumber",
+          "type": "Number"
+        }
+      ],
+      "return": {
+        "type": "Ext.TestClass"
+      }
+    },
+    {
+      "tagname": "method",
+      "name": "methodFromMixinNotOverridden",
+      "owner": "Ext.TestMixin",
+      "params": []
+    },
+    {
+      "tagname": "method",
+      "name": "methodFromMixinOverridden",
+      "owner": "Ext.TestClass",
+      "params": [],
+      "overrides": [
+        {
+          "owner": "Ext.TestMixin",
+          "name": "methodFromMixinOverridden"
+        }
+      ]
+    },
+    {
+      "tagname": "method",
+      "name": "methodWithCallback",
+      "owner": "Ext.TestClass",
+      "params": [
+        {
+          "tagname": "params",
+          "name": "f",
+          "type": "Function",
+          "properties": [
+            {
+              "tagname": "params",
+              "name": "x",
+              "type": "String"
+            },
+            {
+              "tagname": "params",
+              "name": "return",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tagname": "method",
+      "name": "staticMethod",
+      "owner": "Ext.TestClass",
+      "params": []
+    }
+  ]
 }
