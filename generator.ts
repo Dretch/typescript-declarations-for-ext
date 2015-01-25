@@ -18,6 +18,7 @@ module jsduck {
         singleton: boolean;
         members: Member[];
         mixins: string[];
+        enum?: { type: string }
     }
 
     export interface Member {
@@ -197,12 +198,14 @@ function convertFromExtType(classes: jsduck.Class[],
         }
         else {
             try {
-                return normalizeClassName(classes, typ) + arrays;
+                var cls = lookupClass(classes, typ);
             }
             catch (e) {
                 console.warn('Warning: unable to find class, using "any" instead: "' + senchaType + '"');
                 return 'any';
             }
+            // enum types (e.g. Ext.enums.Widget) need special handling
+            return (cls.enum ? convertFromExtType(classes, cls.enum.type) : cls.name) + arrays;
         }
     }
     
@@ -311,7 +314,7 @@ function writeMember(classes: jsduck.Class[],
 
     var staticStr = (cls.singleton || member.static) ? 'static ' : '';
 
-    if (member.tagname == 'property') {
+    if (member.tagname === 'property') {
     
         // workaround a curiosity in Ext5
         if (lookupMember(members, member.name, 'method')) {
@@ -320,11 +323,16 @@ function writeMember(classes: jsduck.Class[],
         }
 
         var opt = member.optional ? '?: ' : ': ',
-            typ = convertFromExtType(classes, member.type);
-        
+            typ = convertFromExtType(classes, member.type),
+            configTag = lookupMember(members, member.name, 'cfg');
+
+        if (!cls.singleton && configTag) {
+            typ = convertFromExtType(classes, configTag.type + '|' + member.type);
+        }
+
         output.push(indent + '    ' + staticStr + quote(member.name) + opt + typ + ';');
     }
-    else if (member.tagname == 'method') {
+    else if (member.tagname === 'method') {
         
         var params = [],
             prevParamNames = {},
@@ -372,8 +380,16 @@ function writeMember(classes: jsduck.Class[],
         
         output.push(indent + '    ' + staticStr + quote(member.name) + '(' + params.join(', ') + ')' + retStr + ';');
     }
-    else {
-        // XXX: we could potentially do stuff with the cfg and event tags
+    else if (member.tagname === 'cfg') {
+
+        if (lookupMember(members, member.name, 'method') || lookupMember(members, member.name, 'property')) {
+            return; // we will emit the method/property tag instead
+        }
+
+        if (!cls.singleton) {
+            var typ = convertFromExtType(classes, member.type);
+            output.push(indent + '    ' + staticStr + quote(member.name) + ': ' + typ + ';');
+        }
     }
 }
 

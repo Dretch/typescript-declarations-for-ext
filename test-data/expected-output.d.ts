@@ -2,6 +2,7 @@
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare module Ext {
     export class TestClass {
+        stringEnumConfig: string;
         numberProperty: number;
         objectProperty: any;
         'property-with-dashes': any;
@@ -15,6 +16,8 @@ declare module Ext {
         methodFromMixinOverridden():void;
         methodWithCallback(f: (x: string) => boolean):void;
         staticMethod():void;
+    }
+    export class TestEnum {
     }
     export class TestSubClass extends Ext.TestSuperClass {
         privateMethodInSuperClass():void;
