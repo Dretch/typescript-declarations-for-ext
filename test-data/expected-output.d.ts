@@ -4,6 +4,7 @@ declare module Ext {
     export class TestClass {
         stringEnumConfig: string;
         numberProperty: number;
+        unionTypeProperty: number|number[];
         objectProperty: any;
         'property-with-dashes': any;
         undefinedProperty: void;

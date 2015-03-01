@@ -51,41 +51,38 @@ var TYPESCRIPT_KEYWORDS = [
         'implements', 'interface', 'let', 'package', 'private', 'protected',
         'public', 'static', 'yield'
     ],
-    PRIMITIVE_WRAPPER_TYPES = [
-        'Boolean',
-        'Number',
-        'String'
-    ],
-    BUILT_IN_TYPES = [
-        'boolean',
-        'number',
-        'string',
-        'undefined',
-        'void',
-        'Object',
-        'String',
-        'Number',
-        'Boolean',
-        'RegExp',
-        'Function',
-        'Array',
-        'Arguments',
-        'Date',
-        'Error',
-        'null',
-        'HTMLElement',
-        'XMLElement',
-        'NodeList',
-        'TextNode',
-        'CSSStyleSheet',
-        'CSSStyleRule',
-        'Event'
-    ];
+    SPECIAL_CASE_TYPE_MAPPINGS = {
+        '*':             'any',
+        'Arguments':     'any',
+        'Array':         'any[]',
+        'boolean':       'boolean',
+        'Boolean':       'boolean',
+        'CSSStyleSheet': 'CSSStyleSheet',
+        'CSSStyleRule':  'CSSStyleRule',
+        'Date':          'Date',
+        'Error':         'Error',
+        'Event':         'Event',
+        'Function':      'Function',
+        'HtmlElement':   'HTMLElement',
+        'HTMLElement':   'HTMLElement',
+        'null':          'void',
+        'number':        'number',
+        'Number':        'number',
+        'NodeList':      'NodeList',
+        'Mixed':         'any',
+        'Object':        'any',
+        'RegExp':        'RegExp',
+        'string':        'string',
+        'String':        'string',
+        'TextNode':      'Text',
+        'undefined':     'void',
+        'XMLElement':    'any'
+    };
 
 
 // Places quotes around the given property name, if necessary
 function quote(name: string):string {
-    // due to unicode this is conservative, not precise, but thats OK
+    // due to unicode this is conservative, not precise, but that is OK
     var needs_quotes = !/^[a-zA-Z$_][a-zA-Z$_0-9]*$/.test(name);
     return needs_quotes ? ("'" + jsesc(name) + "'") : name;
 }
@@ -136,10 +133,12 @@ function groupClassesByModule(classes: jsduck.Class[]):{name: string; classes: j
 
     var modulesList = [];
     for (var module in modulesDict) {
-        modulesList.push({
-            name: module,
-            classes: modulesDict[module]
-        });
+        if (modulesDict.hasOwnProperty(module)) {
+            modulesList.push({
+                name: module,
+                classes: modulesDict[module]
+            });
+        }
     }
     modulesList.sort(function(a, b) {
         return (a.name == b.name) ? 0 : (a.name < b.name ? -1 : 1);
@@ -153,22 +152,15 @@ function convertFromExtType(classes: jsduck.Class[],
                             senchaType: string,
                             properties?: jsduck.Param[]):string {
 
-    function translateSubType(typ:string):string {
+    function mapSubType(typ:string, needsBracket:boolean):string {
 
-        var arrays = /(\[\])*$/.exec(typ)[0];
+        var arrays = /(\[])*$/.exec(typ)[0];
 
         if (arrays) {
             typ = typ.substring(0, typ.length - arrays.length);
         }
 
-        if (PRIMITIVE_WRAPPER_TYPES.indexOf(typ) != -1) {
-            typ = typ.toLowerCase();
-        }
-
-        if (typ == 'undefined') {
-            return 'void' + arrays;
-        }
-        else if (typ == 'Function' && properties) {
+        if (typ === 'Function' && properties) {
 
             // if no return type is specified, assume any - it is not safe to assume void
             var params = [],
@@ -185,40 +177,36 @@ function convertFromExtType(classes: jsduck.Class[],
                 }
             });
 
-            return '(' + params.join(', ') + ') => ' + retTyp + arrays;
+            var fnType = '(' + params.join(', ') + ') => ' + retTyp;
+            return (needsBracket || arrays ? ('(' + fnType + ')') : fnType) + arrays;
         }
-        else if (typ == 'Object' || typ == 'Mixed' || typ == '*') {
-            return 'any' + arrays;
-        }
-        else if (typ == 'Array') {
-            return 'any[]' + arrays;
-        }
-        else if (BUILT_IN_TYPES.indexOf(typ) != -1) {
-            return typ + arrays;
+        else if (SPECIAL_CASE_TYPE_MAPPINGS.hasOwnProperty(typ)) {
+            return SPECIAL_CASE_TYPE_MAPPINGS[typ] + arrays;
         }
         else {
             try {
                 var cls = lookupClass(classes, typ);
             }
             catch (e) {
-                console.warn('Warning: unable to find class, using "any" instead: "' + senchaType + '"');
+                console.warn('Warning: unable to find class, using "any" instead: "' + typ + '"');
                 return 'any';
             }
             // enum types (e.g. Ext.enums.Widget) need special handling
             return (cls.enum ? convertFromExtType(classes, cls.enum.type) : cls.name) + arrays;
         }
     }
-    
-    senchaType = senchaType.replace(/ /g, '');
-    var subTypes = senchaType.split(/[|\/]/);
 
-    // union types are on the way in Typescript 1.4, but that is not yet released!
-    if (subTypes.length > 1) {
-        return 'any';
+    var subTypes = senchaType.replace(/ /g, '').split(/[|\/]/),
+        mappedSubTypes = subTypes.map(function(t) { return mapSubType(t, subTypes.length > 1); });
+
+    // any union type containing "any" is equivalent to "any"!
+    for (var i=0; i<mappedSubTypes.length; i++) {
+        if (mappedSubTypes[i] === 'any') {
+            return 'any';
+        }
     }
-    else {
-        return subTypes.map(translateSubType).join('|');
-    }
+
+    return mappedSubTypes.join('|');
 }
 
 
@@ -400,7 +388,7 @@ function writeTransformedClasses(classes: jsduck.Class[], outputFile: string):vo
     var modules = groupClassesByModule(classes),
         output = [];
 
-    output.push('// Ext type declarations generated on ' + new Date());
+    output.push('// Ext type declarations (Typescript 1.4 or newer) generated on ' + new Date());
     output.push('// For more information, see: https://github.com/Dretch/typescript-declarations-for-ext');
 
     for (var i=0; i<modules.length; i++) {
@@ -419,7 +407,7 @@ function writeTransformedClasses(classes: jsduck.Class[], outputFile: string):vo
                 modifier = module.name ? 'export' : 'declare',
                 normalizedParent = null;
 
-			// Ext 5.0.1 has some classes extending non-existent parent classes!
+            // Ext 5.0.1 has some classes extending non-existent parent classes!
             try {
                 normalizedParent = cls.extends && normalizeClassName(classes, cls.extends);
             }

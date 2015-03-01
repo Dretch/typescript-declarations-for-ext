@@ -19,6 +19,12 @@
     },
     {
       "tagname": "property",
+      "name": "unionTypeProperty",
+      "type": "Number|Number[]",
+      "owner": "Ext.TestClass"
+    },
+    {
+      "tagname": "property",
       "name": "objectProperty",
       "type": "Object",
       "owner": "Ext.TestClass"
