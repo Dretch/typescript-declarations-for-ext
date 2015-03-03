@@ -237,12 +237,14 @@ function lookupClass(classes: jsduck.Class[], name: string):jsduck.Class {
 }
 
 
-function lookupMember(members: jsduck.Member[], name: string, tagname?: string, static?: boolean):jsduck.Member {
+function lookupMember(members: jsduck.Member[], name: string, tagnames?: string[], static?: boolean):jsduck.Member {
     for (var i=0; i<members.length; i++) {
-        var member = members[i];
-        if (member.name === name &&
-            (typeof tagname !== 'string' || member.tagname === tagname) &&
-            (typeof static !== 'boolean' || !!member.static === static)) {
+
+        var member = members[i],
+            tagMatch = !tagnames || tagnames.indexOf(member.tagname) !== -1,
+            staticMatch = typeof static !== 'boolean' || !!member.static === static;
+
+        if (member.name === name && tagMatch && staticMatch) {
             return member;
         }
     }
@@ -273,7 +275,7 @@ function parentIncludesMember(classes: jsduck.Class[],
         return true;
     }
 
-    var member = lookupMember(parentCls.members, memberName, null, staticSide);
+    var member = lookupMember(parentCls.members, memberName, ['property', 'method', 'cfg'], staticSide);
 
     return member && isMemberVisible(parentCls, member);
 }
@@ -305,14 +307,14 @@ function writeMember(classes: jsduck.Class[],
     if (member.tagname === 'property') {
     
         // workaround a curiosity in Ext5
-        if (lookupMember(members, member.name, 'method')) {
+        if (lookupMember(members, member.name, ['method'])) {
             console.warn('Warning: omitting property that also exists as a method: ' + cls.name + '.' + member.name);
             return;
         }
 
         var opt = member.optional ? '?: ' : ': ',
             typ = convertFromExtType(classes, member.type),
-            configTag = lookupMember(members, member.name, 'cfg');
+            configTag = lookupMember(members, member.name, ['cfg']);
 
         if (!cls.singleton && configTag) {
             typ = convertFromExtType(classes, configTag.type + '|' + member.type);
@@ -370,7 +372,7 @@ function writeMember(classes: jsduck.Class[],
     }
     else if (member.tagname === 'cfg') {
 
-        if (lookupMember(members, member.name, 'method') || lookupMember(members, member.name, 'property')) {
+        if (lookupMember(members, member.name, ['method', 'property'])) {
             return; // we will emit the method/property tag instead
         }
 

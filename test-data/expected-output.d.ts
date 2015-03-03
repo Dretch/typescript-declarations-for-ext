@@ -22,6 +22,7 @@ declare module Ext {
     }
     export class TestSubClass extends Ext.TestSuperClass {
         privateMethodInSuperClass():void;
+        eventInSuperClass():void;
     }
     export class TestSuperClass {
     }

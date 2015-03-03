@@ -1,4 +1,4 @@
-// Ext type declarations (Typescript 1.4 or newer) generated on Sun Mar 01 2015 14:15:11 GMT+0000 (GMT)
+// Ext type declarations (Typescript 1.4 or newer) generated on Tue Mar 03 2015 19:49:18 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;
@@ -3495,6 +3495,7 @@ declare module Ext.data {
     export class ChainedStore extends Ext.data.AbstractStore {
         source: Ext.data.Store|string;
         constructor();
+        add(...model: any[]):Ext.data.Model[];
         aggregate(fn: Function, scope?: any, grouped?: boolean, field?: string):any;
         average(field: string, grouped?: boolean):any;
         collect(dataIndex: string, allowNull?: boolean, bypassFilter?: boolean):any[];
@@ -4031,6 +4032,7 @@ declare module Ext.data {
         session: Ext.data.Session;
         loadCount: number;
         constructor(config?: any);
+        add(...model: any[]):Ext.data.Model[];
         addSorted(record: Ext.data.Model):void;
         aggregate(fn: Function, scope?: any, grouped?: boolean, field?: string):any;
         average(field: string, grouped?: boolean):any;
@@ -4061,6 +4063,7 @@ declare module Ext.data {
         query(property: string, value: string|RegExp, anyMatch?: boolean, caseSensitive?: boolean, exactMatch?: boolean):Ext.util.Collection;
         queryBy(fn: (record: Ext.data.Model, id: any) => any, scope?: any):Ext.util.Collection;
         rejectChanges():void;
+        remove(records: Ext.data.Model|Ext.data.Model[]|number|number[]):void;
         removeAt(index: number, count?: number):void;
         setClearOnPageLoad(clearOnPageLoad: boolean):void;
         setClearRemovedOnLoad(clearRemovedOnLoad: boolean):void;
@@ -7770,6 +7773,7 @@ declare module Ext.form.field {
         getValueNotFoundText():string;
         onBindStore(store: any, initial: any):void;
         onUnbindStore():void;
+        select(r: any):void;
         setFilters(filters: any):void;
         setSelection(selection: Ext.data.Model):void;
         setStore(store: any):void;

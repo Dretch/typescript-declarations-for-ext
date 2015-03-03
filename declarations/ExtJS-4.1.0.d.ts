@@ -1,4 +1,4 @@
-// Ext type declarations (Typescript 1.4 or newer) generated on Sun Mar 01 2015 14:13:23 GMT+0000 (GMT)
+// Ext type declarations (Typescript 1.4 or newer) generated on Tue Mar 03 2015 19:46:25 GMT+0000 (GMT)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;
@@ -492,9 +492,11 @@ declare module Ext {
         doConstrain(constrainTo?: string|HTMLElement|Ext.dom.Element|Ext.util.Region):void;
         findParentBy(fn: Function):Ext.container.Container;
         findParentByType(xtype: string|Ext.Class):Ext.container.Container;
+        focus(selectText?: boolean, delay?: boolean|number):Ext.Component;
         getBox(local?: boolean):any;
         getPosition(local?: boolean):number[];
         getXType():string;
+        hide(animateTarget?: string|Ext.dom.Element|Ext.Component, callback?: Function, scope?: any):Ext.Component;
         initComponent():void;
         onDestroy():void;
         onHide(animateTarget?: string|Ext.dom.Element|Ext.Component, callback?: Function, scope?: any):void;
@@ -1745,6 +1747,7 @@ declare module Ext.container {
         getLayout():Ext.layout.container.Container;
         insert(index: number, component: Ext.Component):Ext.Component;
         isAncestor(possibleDescendant: Ext.Component):void;
+        move(fromIdx: number, toIdx: number):Ext.Component;
         onAdd(component: Ext.Component, position: number):void;
         onBeforeAdd(item: Ext.Component):void;
         onRemove(component: Ext.Component, autoDestroy: boolean):void;
@@ -2186,6 +2189,7 @@ declare module Ext.data {
         groupers: Ext.util.MixedCollection;
         snapshot: Ext.util.MixedCollection;
         constructor(config?: any);
+        add(...model: any[]):Ext.data.Model[];
         addSorted(record: Ext.data.Model):void;
         aggregate(fn: Function, scope?: any, grouped?: boolean, args?: any[]):any;
         average(field: string, grouped?: boolean):any;
@@ -2232,6 +2236,7 @@ declare module Ext.data {
         previousPage(options: any):void;
         queryBy(fn: (record: Ext.data.Model, id: any) => any, scope?: any):Ext.util.MixedCollection;
         rejectChanges():void;
+        remove(records: Ext.data.Model|Ext.data.Model[]):void;
         removeAt(index: number):void;
         sum(field: string, grouped?: boolean):number;
     }
@@ -4023,6 +4028,7 @@ declare module Ext.form.field {
         getStoreListeners():any;
         onBindStore(store: any, initial: any):void;
         onUnbindStore(store: any):void;
+        select(r: any):void;
         unbindStoreListeners(store: Ext.data.AbstractStore):void;
     }
     export class Date extends Ext.form.field.Picker {

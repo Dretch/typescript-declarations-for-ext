@@ -8,6 +8,11 @@
       "name": "privateMethodInSuperClass",
       "params": [],
       "private": false
+    },
+    {
+      "tagname": "method",
+      "name": "eventInSuperClass",
+      "params": []
     }
   ]
 }
