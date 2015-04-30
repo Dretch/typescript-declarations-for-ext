@@ -1,4 +1,4 @@
-// Ext type declarations (Typescript 1.4 or newer) generated on Tue Mar 03 2015 19:49:18 GMT+0000 (GMT)
+// Ext type declarations (Typescript 1.4 or newer) generated on Wed Apr 29 2015 23:09:33 GMT+0100 (BST)
 // For more information, see: https://github.com/Dretch/typescript-declarations-for-ext
 declare class Ext {
     static BLANK_IMAGE_URL: string;
@@ -1727,7 +1727,7 @@ declare module Ext.app {
         on(eventName: any, fn?: Function, scope?: any, options?: any, order?: string):any;
         onAfter(eventName: any, fn: Function|string, scope?: any, options?: any):void;
         onBefore(eventName: any, fn: Function|string, scope?: any, options?: any):void;
-        redirectTo(token: string|Ext.data.Model, _token: string, force: boolean):boolean;
+        redirectTo(token: string|Ext.data.Model, force: boolean):boolean;
         relayEvents(origin: any, events: string[], prefix?: string):any;
         removeAfterListener(eventName: any, fn: Function|string, scope?: any, options?: any):void;
         removeBeforeListener(eventName: any, fn: Function|string, scope?: any, options?: any):void;

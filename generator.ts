@@ -336,9 +336,11 @@ function writeMember(classes: jsduck.Class[],
                 paramName = escapeParamName(param.name),
                 typ = param.type;
 
-            // Ext 5.1.0 has some duplicate parameter names!
-            while (prevParamNames[paramName]) {
-                paramName = '_' + paramName;
+            // Ext 5.1.0 has a method with a parameter documented twice, even though
+            // it only exists once in the code (Ext.app.BaseController.redirectTo)
+            if (prevParamNames[paramName]) {
+                console.warn('Warning: skipping duplicate parameter ' + cls.name + '.' + member.name + '#' + paramName);
+                continue;
             }
 
             // after one optional parameter, all the following parameters must also be optional
