@@ -1,6 +1,6 @@
 This takes JSDuck output (https://github.com/senchalabs/jsduck) and turns it into type declarations for Typescript (version 1.4+).
 
-This is designed to be used in conjunction with fabioparra's patched Typescript compiler that emits ExtJS style classes (https://github.com/fabioparra/TypeScriptExtJSEmitter). ExtJS versions 4 and 5 are supported.
+This is designed to be used in conjunction with fabioparra's patched Typescript compiler that emits ExtJS style classes (https://github.com/fabioparra/TypeScript). ExtJS versions 4 and 5 are supported.
 
 
 Pre-generated declaration files
