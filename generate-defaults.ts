@@ -13,12 +13,12 @@ import shelljs = require('shelljs');
 
 var TMP_DIR = process.env.EXT_TYPESCRIPT_DECLARATIONS_CACHE || '/tmp/typescript-declarations-for-ext',
     EXT_VERSIONS = [
-        { name: 'ExtJS-4.1.0',     folder: 'extjs-4.1.0',   url: 'http://learningextjs.googlecode.com/files/ext-4.1.0-gpl.zip', jsduck_extra: ''},
-        { name: 'ExtJS-4.2.0.663', folder: 'ext-4.2.0.663', url: 'http://cdn.sencha.com/ext/gpl/ext-4.2.0-gpl.zip', jsduck_extra: ''},
-        { name: 'ExtJS-4.2.1.883', folder: 'ext-4.2.1.883', url: 'http://cdn.sencha.com/ext/gpl/ext-4.2.1-gpl.zip', jsduck_extra: '' },
-        { name: 'ExtJS-5.0.1',     folder: 'ext-5.0.1',     url: 'http://cdn.sencha.com/ext/gpl/ext-5.0.1-gpl.zip', jsduck_extra: 'ext-5.0.1/packages/sencha-*' },
-        { name: 'ExtJS-5.1.0',     folder: 'ext-5.1.0',     url: 'http://cdn.sencha.com/ext/gpl/ext-5.1.0-gpl.zip', jsduck_extra: 'ext-5.1.0/packages/sencha-*' },
-        { name: 'ExtJS-6.0.1',     folder: 'ext-6.0.1',     url: 'http://cdn.sencha.com/ext/gpl/ext-6.0.1-gpl.zip', jsduck_extra: 'ext-6.0.1/packages/sencha-* ext-6.0.1/packages/core*', theme : 'classic' }
+        { name: 'ExtJS-4.1.0',     folder: 'extjs-4.1.0',   url: 'http://learningextjs.googlecode.com/files/ext-4.1.0-gpl.zip', jsduck_extra: '', theme : ''},
+        { name: 'ExtJS-4.2.0.663', folder: 'ext-4.2.0.663', url: 'http://cdn.sencha.com/ext/gpl/ext-4.2.0-gpl.zip',             jsduck_extra: '', theme: '' },
+        { name: 'ExtJS-4.2.1.883', folder: 'ext-4.2.1.883', url: 'http://cdn.sencha.com/ext/gpl/ext-4.2.1-gpl.zip',             jsduck_extra: '', theme: '' },
+        { name: 'ExtJS-5.0.1',     folder: 'ext-5.0.1',     url: 'http://cdn.sencha.com/ext/gpl/ext-5.0.1-gpl.zip',             jsduck_extra: 'ext-5.0.1/packages/sencha-*', theme: '' },
+        { name: 'ExtJS-5.1.0',     folder: 'ext-5.1.0',     url: 'http://cdn.sencha.com/ext/gpl/ext-5.1.0-gpl.zip',             jsduck_extra: 'ext-5.1.0/packages/sencha-*', theme: '' },
+        { name: 'ExtJS-6.0.1',     folder: 'ext-6.0.1',     url: 'http://cdn.sencha.com/ext/gpl/ext-6.0.1-gpl.zip',             jsduck_extra: 'ext-6.0.1/packages/*', theme : 'classic' }
     ];
 
 EXT_VERSIONS.forEach(function(version) {
@@ -33,8 +33,8 @@ EXT_VERSIONS.forEach(function(version) {
     shelljs.exec('unzip -uq *.zip');
     shelljs.mkdir('-p', version.folder + '.docs');
 
-    var srcPath = version.theme ? version.theme + '/' + version.theme + '/src' : '/src';
-    shelljs.exec('jsduck ' + version.folder + '/src ' + version.jsduck_extra + ' --export=full --output ' + version.folder + '.docs');
+    var srcPath = version.theme ? version.theme + '/' + version.theme + '/src' : './src';
+    shelljs.exec('jsduck ' + './' + version.folder + srcPath + ' ' + version.jsduck_extra + ' --export=full --output ' + version.folder + '.docs');
 
     shelljs.cd(oldPwd);
     shelljs.exec('tsc --module commonjs generator.ts && node generator.js ' + dir + '/' + version.folder + '.docs ./declarations/' + version.name + '.d.ts');
