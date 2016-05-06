@@ -233,16 +233,18 @@ function lookupClass(classes: jsduck.Class[], name: string):jsduck.Class {
             }
         }
     }
+
+
     throw "Class not found: " + name;
 }
 
 
-function lookupMember(members: jsduck.Member[], name: string, tagnames?: string[], static?: boolean):jsduck.Member {
+function lookupMember(members: jsduck.Member[], name: string, tagnames?: string[], isStatic?: boolean):jsduck.Member {
     for (var i=0; i<members.length; i++) {
 
         var member = members[i],
             tagMatch = !tagnames || tagnames.indexOf(member.tagname) !== -1,
-            staticMatch = typeof static !== 'boolean' || !!member.static === static;
+            staticMatch = typeof isStatic !== 'boolean' || !!member.static === isStatic;
 
         if (member.name === name && tagMatch && staticMatch) {
             return member;
